@@ -1,5 +1,5 @@
 <?php
-include_once "{$_SEVER['DOCUMENT_ROOT']}/lib/lib_mysql.php" ;
+include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php" ;
 $conn = sql_open(); 
 $sql = "SELECT * FROM genre";
 ?>
@@ -85,7 +85,7 @@ $sql = "SELECT * FROM genre";
             color:#1d50a1;
             font-size: 18;
             font-weight: bold;
-            margin-left: 84%;
+            margin-left: 1020px;
             width: 120px;
 
         }
@@ -104,12 +104,7 @@ $sql = "SELECT * FROM genre";
             grid-template-columns: 1fr 2fr;
             margin-bottom: 15px;
         }
-        .search{
-            max-width: 150px;
-            background-color: #D9D9D9;
-            border-color: #1d50a1;
-            font-family: Inter;
-        }
+
     </style>
 </head>
 
@@ -185,10 +180,7 @@ $sql = "SELECT * FROM genre";
             </div>
 
             <div class="wrapper">
-                <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2 search" type="search" placeholder="搜尋分類" aria-label="Search">
-                </form>
-                <button onclick="window.location.href='spot-add.php'" type="button" class="btn btn-outline-primary my-btn">＋&nbsp;新增分類</button>
+                <button onclick="window.location.href='genre-add.php'" type="button" class="btn btn-outline-primary my-btn">＋&nbsp;新增分類</button>
             </div>
                 
                  <?php
@@ -205,12 +197,12 @@ $sql = "SELECT * FROM genre";
                             echo "</tr>";
                         }
                 
-                        echo "</table></center>";
-                        echo "</div>";
-                    
+                        echo "</table>";
+
+
                     }
             
-                    mysqli_close($link);
+                    mysqli_close($conn);
                 ?> 
 
         </div>
