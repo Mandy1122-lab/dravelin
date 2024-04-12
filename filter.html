@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>進階搜尋</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="css/plyr.css" type="text/css">
+    <link rel="stylesheet" href="css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <!--font-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
+    <script src="https://kit.fontawesome.com/937e93c93c.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #222538;
+        color: white;
+        position: relative; 
+        min-height: 100vh; 
+        box-sizing: border-box;
+        }
+
+        .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: transparent;
+        }
+        .searchButton{
+        margin-left: 1020px;
+        }
+        .search-bar {
+          margin-bottom: 20px;
+          padding: 8px 12px;
+          border: 1px solid #ccc;
+          border-radius: 20px;
+          width: 100%;
+          box-sizing: border-box;
+          font-size: 16px;
+          background-color: #fff;
+          display: flex;
+          align-items: center;
+        }
+        .search-bar input[type="text"] {
+          flex: 1;
+          border: none;
+          outline: none;
+          padding: 6px 10px;
+          font-size: 16px;
+        }
+        .search-icon {
+          color: #777;
+          margin-right: 10px;
+        }
+        .search-icon:hover {
+          color: #333;
+        }
+        .grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          grid-gap: 20px;
+          border-top: 1px solid white; 
+          padding-top: 20px; 
+        }
+        .card {
+          background-color: #fff;
+          padding: 5px;
+          border-radius: 2px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          justify-content: center;
+          align-items: center;
+        }
+        .card img {
+          width: 100%;
+          height: 200px;
+          object-fit: cover;
+          border-radius: 2px;
+        }
+        .card h3 {
+          margin-top: 10px;
+          font-size: 16px;
+          text-align: center;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 100%;
+        }
+        .back-icon {
+          position: absolute;
+          top: 20px;
+          left: 20px;
+          font-size: 24px;
+          color: #fff;
+          cursor: pointer;
+        }
+        
+        .wrapper {
+          margin-bottom: 20px; 
+        }
+        .wrapper h4 {
+          margin-bottom: 10px;
+          padding-bottom: 5px; 
+          color: white; 
+        }
+        
+        .options label {
+          padding: 5px 10px;
+          border: 1px solid #ccc;
+          border-radius: 20px;
+          cursor: pointer;
+          color: white;
+        }
+        
+        .options label:hover {
+          background-color: #f5f5f5;
+        }
+        
+        .options input[type="checkbox"] {
+          display: none;
+        }
+        
+        .options input[type="checkbox"]:checked + label {
+          background-color: #fff;
+          color: #222538;
+          border: 1px solid #222538;
+        }
+        
+        .title {
+          text-align: center;
+          margin-bottom: 20px;
+          font-size: 24px;
+          font-weight: bold;
+        }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      var genreOptions = document.getElementById("genreOptions");
+
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+              var options = JSON.parse(this.responseText);
+              options.forEach(function(option) {
+                  var label = document.createElement("label");
+                  var input = document.createElement("input");
+                  input.type = "checkbox";
+                  input.name = "genre";
+                  input.value = option;
+                  label.appendChild(input);
+                  label.appendChild(document.createTextNode(" " + option));
+                  genreOptions.appendChild(label);
+              });
+          }
+      };
+      xhr.open("GET", "fetch_options.php", true);
+      xhr.send();
+  });
+</script>
+
+</head>
+
+<body>
+  <a href="javascript:history.back()" class="back-icon"><i class="fas fa-arrow-left"></i></a>
+  <div class="title">進階搜尋</div>
+
+  <div class="container">
+      <form id="searchForm">
+          <div class="wrapper">
+              <div>
+                  <h4>作品類型</h4>
+                  <div class="options" id="typeOptions">
+                    <label><input type="checkbox" name="type" value="全部"> 全部</label>
+                    <label><input type="checkbox" name="type" value="劇集"> 劇集</label>
+                    <label><input type="checkbox" name="type" value="電影"> 電影</label>
+                </div>
+              </div>
+          </div>
+          <div class="wrapper">
+              <div>
+                  <h4>作品類別</h4>
+                  <div class="options" id="genreOptions">
+                    <label><input type="checkbox" name="genre" value="全部"> 全部</label>
+                </div>
+              </div>
+          </div>
+          <div class="wrapper">
+              <div>
+                  <h4>國家</h4>
+                  <div class="options" id="countryOptions">
+                    <div class="options" id="countryOptions">
+                      <label><input type="checkbox" name="country" value="全部"> 全部</label>
+                      <label><input type="checkbox" name="country" value="台灣"> 台灣</label>
+                      <label><input type="checkbox" name="country" value="日本"> 日本</label>
+                      <label><input type="checkbox" name="country" value="韓國"> 韓國</label>
+                  </div>
+                  </div>
+              </div>
+          </div>
+          <div class="wrapper">
+              <button type="submit" class="searchButton">查詢</button>
+          </div>
+      </form>
+      <div id="searchResults" class="grid">
+        <?php include 'filter.php'; ?>
+      </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
