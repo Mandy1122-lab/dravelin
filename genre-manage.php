@@ -25,9 +25,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['g_id']
     $sql = "DELETE FROM genre WHERE g_id='$g_id'";
     mysqli_query($conn, $sql);
 
-    header("Location: {$_SERVER['PHP_SELF']}");
+    header("Location: genre.php");
     exit();
 }
+
 
 $sql = "SELECT * FROM genre";
 $result = mysqli_query($conn, $sql);
@@ -48,7 +49,10 @@ if (mysqli_num_rows($result) > 0) {
         echo "<tr>";
         echo "<td>{$row['g_id']}</td>";
         echo "<td align='center'><input type='text' id='g_name_{$row['g_id']}' value='{$row['g_name']}'></td>";
-        echo "<td align='center'><button onclick='saveGenre({$row['g_id']})'>儲存</button></td>";
+        echo "<td align='center'>
+                  <button onclick='saveGenre({$row['g_id']})'>儲存</button>
+                  <button onclick='deleteGenre({$row['g_id']})'>刪除</button>
+              </td>";
         echo "</tr>";
     }
 
@@ -66,9 +70,23 @@ function saveGenre(g_id) {
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4 && xhr.status == 200) {
-            console.log('Updated successfully');
+            console.log('編輯完成');
         }
     };
     xhr.send('g_id=' + g_id + '&g_name=' + g_name);
+}
+
+function deleteGenre(g_id) {
+    if (confirm('是否確定刪除此分類？')) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'genre-manage.php?action=delete&g_id=' + g_id, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                console.log('刪除完成');
+                location.reload();
+            }
+        };
+        xhr.send();
+    }
 }
 </script>

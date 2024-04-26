@@ -191,11 +191,10 @@ $sql = "SELECT * FROM genre";
                     echo "<tr><th>#</th><th>分類</th><th>操作</th></tr>";
 
                     while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<tr>";
+                        echo "<tr data-id='{$row['g_id']}'>";
                         echo "<td>{$row['g_id']}</td>";
-                        echo "<td align='center'>{$row['g_name']}</td>";
-                        echo '<td align="center"><a href="?g_id=' . $row['g_id'] . '"><i class="fa-solid fa-pen" style="color: #1d50a1;"></i></a>&nbsp;&nbsp;&nbsp;
-                        <a href="?g_id=' . $row['g_id'] . '"><i class="fa-solid fa-trash" style="color: #de2626;"></i></a></td>';
+                        echo "<td align='center' class='g-name'>{$row['g_name']}</td>";
+                        echo "<td align='center'><i class='fa-solid fa-pen edit-icon' style='color: #1d50a1;'></i>&nbsp;&nbsp;&nbsp;<i class='fa-solid fa-trash delete-icon' style='color: #de2626;'></i></td>";
                         echo "</tr>";
                     }
 
@@ -256,7 +255,57 @@ $sql = "SELECT * FROM genre";
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('.my-btn').addEventListener('click', function () {
-                // Do nothing on button click
+            });
+
+            // 編輯
+            var editIcons = document.querySelectorAll('.edit-icon');
+            editIcons.forEach(function(icon) {
+                icon.addEventListener('click', function() {
+                    var row = icon.parentNode.parentNode;
+                    var nameCell = row.querySelector('.g-name');
+                    var nameInput = document.createElement('input');
+                    nameInput.setAttribute('type', 'text');
+                    nameInput.setAttribute('value', nameCell.textContent.trim());
+                    nameCell.textContent = '';
+                    nameCell.appendChild(nameInput);
+                    icon.classList.remove('fa-pen');
+                    icon.classList.add('fa-save');
+
+                    icon.addEventListener('click', function() {
+                        var newName = nameInput.value;
+                        var gId = row.getAttribute('data-id');
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('POST', 'genre-manage.php', true);
+                        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState == 4 && xhr.status == 200) {
+                                console.log('Updated successfully');
+                                location.reload();
+                            }
+                        };
+                        xhr.send('g_id=' + gId + '&g_name=' + newName);
+                    });
+                });
+            });
+
+            // 刪除
+            var deleteIcons = document.querySelectorAll('.delete-icon');
+            deleteIcons.forEach(function(icon) {
+                icon.addEventListener('click', function() {
+                    if (confirm('確定要刪除這個分類嗎？')) {
+                        var row = icon.parentNode.parentNode;
+                        var gId = row.getAttribute('data-id');
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('GET', 'genre-manage.php?action=delete&g_id=' + gId, true);
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState == 4 && xhr.status == 200) {
+                                console.log('Deleted successfully');
+                                location.reload();
+                            }
+                        };
+                        xhr.send();
+                    }
+                });
             });
         });
     </script>
