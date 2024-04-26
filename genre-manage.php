@@ -62,7 +62,7 @@ mysqli_close($conn);
 function saveGenre(g_id) {
     var g_name = document.getElementById('g_name_' + g_id).value;
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'genre-management.php', true);
+    xhr.open('POST', 'genre-manage.php', true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4 && xhr.status == 200) {

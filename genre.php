@@ -8,14 +8,14 @@ $sql = "SELECT * FROM genre";
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>分類</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>分類</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+    rel="stylesheet">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
@@ -29,10 +29,82 @@ $sql = "SELECT * FROM genre";
     <!--font-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
     <script src="https://kit.fontawesome.com/937e93c93c.js" crossorigin="anonymous"></script>
-
+    
 
     <style>
-        /* Your custom styles here */
+        
+        .heading_logo,.heading_logo a{
+            color: white;
+            font-weight: bold;
+            font-size: 30px;
+            margin-top: 7px;
+        }
+        .section_title{
+            margin-bottom: 30px;
+            color: #000;
+            font-weight: 600;
+            line-height: 21px;
+            text-transform: uppercase;
+            padding-left: 20px;
+            position: relative;
+        }
+        .section_title,.section_title h4{
+            margin-bottom: 30px;
+            color: #000;
+            font-weight: bolder;
+            line-height: 21px;
+            text-transform: uppercase;
+            padding-left: 15px;
+            position: relative;
+            
+        }
+        .section_title{
+            border-bottom: 1px solid;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            }
+
+        td, th {
+            border: 1px solid #B1B1B1;
+            text-align: left;
+            padding: 8px;
+            text-align: center;
+            }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+            }
+        tr th,tr:nth-child(odd){
+            background-color: #f5f5f5;
+        }
+        .my-btn{
+            background-color: #F5F4F0;
+            border-color: #1d50a1;
+            color:#1d50a1;
+            font-size: 18;
+            font-weight: bold;
+            margin-left: 1020px;
+            width: 120px;
+
+        }
+        .my-btn:hover{
+            background-color: #1d50a1;
+            border-color: #1d50a1;
+            color: #f5f4f0;
+        }
+        .my-btn:active{
+            background-color: #1d50a1 !important;
+            border-color: #1d50a1 !important;
+            color: #f5f4f0 !important;
+        }
+        .wrapper{
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            margin-bottom: 15px;
+        }
+
     </style>
 </head>
 
@@ -43,7 +115,59 @@ $sql = "SELECT * FROM genre";
     </div>
 
     <!-- Header Section Begin -->
-    <!-- Your header code here -->
+    <header class="header">
+        <div class="container">
+            <div class="row"> 
+                <div class="col-lg-2">
+                    <div class="heading_logo">
+                        <a href="./index.html">
+
+                            Dravelin
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="header__nav">
+                        <nav class="header__menu mobile-menu">
+                            <ul>
+                                <li><a href="#">劇集<span class="arrow_carrot-down"></span></a>
+                                    <ul class="dropdown">
+                                        <li><a href="#">C</a></li>
+                                        <li><a href="#">A</a></li>
+                                        <li><a href="#">A</a></li>
+                                        <li><a href="#">B</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">電影<span class="arrow_carrot-down"></span></a>
+                                    <ul class="dropdown">
+                                        <li><a href="#">C</a></li>
+                                        <li><a href="#">A</a></li>
+                                        <li><a href="#">A</a></li>
+                                        <li><a href="#">a</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">拍攝景點<span class="arrow_carrot-down"></span></a>
+                                    <ul class="dropdown">
+                                        <li><a href="#">台灣</a></li>
+                                        <li><a href="#">韓國</a></li>
+                                        <li><a href="#">日本</a></li>
+                                        <li><a href="#">泰國</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">活動專區</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="header__right">
+                        <a href="#" class="search-switch"><i class="fa-solid fa-magnifying-glass fa-lg" style="color: #ffffff;"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div id="mobile-menu-wrap"></div>
+        </div>
+    </header>
     <!-- Header End -->
 
     <section class="product-page spad">
@@ -54,10 +178,13 @@ $sql = "SELECT * FROM genre";
                 </div>
 
                 <div class="wrapper">
-                    <button id="addGenreBtn" class="btn btn-outline-primary my-btn">＋&nbsp;新增分類</button>
+                    <button type="button" class="btn btn-outline-primary my-btn">＋&nbsp;新增分類</button>
                 </div>
 
                 <?php
+                include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php" ;
+                $conn = sql_open(); 
+                $sql = "SELECT * FROM genre";
                 $result = mysqli_query($conn, $sql);
                 if (mysqli_num_rows($result) > 0) {
                     echo "<table>";
@@ -66,8 +193,9 @@ $sql = "SELECT * FROM genre";
                     while ($row = mysqli_fetch_assoc($result)) {
                         echo "<tr>";
                         echo "<td>{$row['g_id']}</td>";
-                        echo "<td align='center'><span class='edit' data-id='{$row['g_id']}'>{$row['g_name']}</span></td>";
-                        echo '<td align="center"><a href="genre-management.php?action=delete&g_id=' . $row['g_id'] . '"><i class="fa-solid fa-trash" style="color: #de2626;"></i></a></td>';
+                        echo "<td align='center'>{$row['g_name']}</td>";
+                        echo '<td align="center"><a href="?g_id=' . $row['g_id'] . '"><i class="fa-solid fa-pen" style="color: #1d50a1;"></i></a>&nbsp;&nbsp;&nbsp;
+                        <a href="?g_id=' . $row['g_id'] . '"><i class="fa-solid fa-trash" style="color: #de2626;"></i></a></td>';
                         echo "</tr>";
                     }
 
@@ -81,9 +209,39 @@ $sql = "SELECT * FROM genre";
         </div>
     </section>
 
-    <!-- Footer Section Begin -->
-    <!-- Your footer code here -->
-    <!-- Footer Section End -->
+
+<!-- Footer Section Begin -->
+<footer class="footer">
+    <div class="page-up">
+        <a href="#" id="scrollToTopButton"><span class="arrow_carrot-up"></span></a>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="footer__logo">
+                    <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="footer__nav">
+                    <ul>
+                        <li class="active"><a href="./index.html">Homepage</a></li>
+                        <li><a href="./categories.html">Categories</a></li>
+                        <li><a href="./blog.html">Our Blog</a></li>
+                        <li><a href="#">Contacts</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Footer Section End -->
 
     <!-- Js Plugins -->
     <script src="js/jquery-3.3.1.min.js"></script>
@@ -97,30 +255,8 @@ $sql = "SELECT * FROM genre";
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('addGenreBtn').addEventListener('click', function () {
-                var table = document.querySelector('table');
-                var newRow = table.insertRow(table.rows.length - 1);
-                var cell1 = newRow.insertCell(0);
-                var cell2 = newRow.insertCell(1);
-                var cell3 = newRow.insertCell(2);
-                cell1.innerHTML = '-';
-                cell2.innerHTML = '<input type="text" id="newGenreName">';
-                cell3.innerHTML = '<button id="saveNewGenreBtn">儲存</button>';
-
-                document.getElementById('saveNewGenreBtn').addEventListener('click', function () {
-                    var newGenreName = document.getElementById('newGenreName').value;
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('POST', 'genre-management.php', true);
-                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                    xhr.onreadystatechange = function () {
-                        if (xhr.readyState == 4 && xhr.status == 200) {
-                            console.log('Inserted successfully');
-                            // Reload the page to show the new data
-                            location.reload();
-                        }
-                    };
-                    xhr.send('action=add&g_name=' + newGenreName);
-                });
+            document.querySelector('.my-btn').addEventListener('click', function () {
+                // Do nothing on button click
             });
         });
     </script>

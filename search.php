@@ -1,10 +1,11 @@
 <?php
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php" ;
 $conn = sql_open(); 
-$sql = "SELECT 'a' AS source, a_name AS name, a_img AS img FROM a WHERE a_name LIKE '%$search%'
-        UNION
-        SELECT 'b' AS source, b_name AS name, b_img AS img FROM b WHERE b_name LIKE '%$search%'";
 $search = $_POST["search"];
+$sql = "SELECT 'drama' AS source, d_name AS name, d_pic AS img FROM drama WHERE d_name LIKE '%$search%'
+        UNION
+        SELECT 'movie' AS source, m_name AS name, m_pic AS img FROM movie WHERE m_name LIKE '%$search%'";
+
 ?>
 
 <!DOCTYPE html>
