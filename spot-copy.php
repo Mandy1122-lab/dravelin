@@ -134,7 +134,7 @@
                 if ($result) {
                     while ($row = mysqli_fetch_assoc($result)) {
                         echo "<div class='image-container'>";
-                        echo "<img class='image c-img' style ="width:100%"src='{$row['c_pic']}'>";
+                        echo "<img class='image c-img' style ='width:100%' src='{$row['c_pic']}'>";
                         echo "<div class='text-overlay'>";
                         echo "<a href='country.php?c_id=" . $row['c_id'] . "'><p style='font-size: 30px;font-weight:bolder;color:#ffffff'>" . $row['c_name'] . "</p></a>";
                         echo "</div>";
