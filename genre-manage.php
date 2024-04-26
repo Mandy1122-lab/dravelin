@@ -3,26 +3,23 @@ include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
 
 $conn = sql_open(); 
 
-    // 新增
+// 新增
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['g_name'])) {
-
     $g_name = $_POST['g_name'];
     $sql = "INSERT INTO genre (g_name) VALUES ('$g_name')";
     mysqli_query($conn, $sql);
 }
 
-    // 修改
+// 編輯
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['g_id']) && isset($_POST['g_name'])) {
-
     $g_id = $_POST['g_id'];
     $g_name = $_POST['g_name'];
     $sql = "UPDATE genre SET g_name='$g_name' WHERE g_id='$g_id'";
     mysqli_query($conn, $sql);
 }
 
-    // 刪除
+// 刪除
 if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['g_id'])) {
-
     $g_id = $_GET['g_id'];
     $sql = "DELETE FROM genre WHERE g_id='$g_id'";
     mysqli_query($conn, $sql);
@@ -30,7 +27,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['g_id']
     header("Location: {$_SERVER['PHP_SELF']}");
     exit();
 }
-
 
 $sql = "SELECT * FROM genre";
 $result = mysqli_query($conn, $sql);

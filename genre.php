@@ -162,7 +162,6 @@ $sql = "SELECT * FROM genre";
                 <div class="col-lg-2">
                     <div class="header__right">
                         <a href="#" class="search-switch"><i class="fa-solid fa-magnifying-glass fa-lg" style="color: #ffffff;"></i></a>
-                        <!-- <a href="./login.html"><span class="icon_profile"></span></a> -->
                     </div>
                 </div>
             </div>
@@ -170,7 +169,6 @@ $sql = "SELECT * FROM genre";
         </div>
     </header>
     <!-- Header End -->
-</head>
 
 <section class="product-page spad">
     <div class="container">
@@ -198,10 +196,7 @@ $sql = "SELECT * FROM genre";
                         }
                 
                         echo "</table>";
-
-
                     }
-            
                     mysqli_close($conn);
                 ?> 
 
@@ -209,8 +204,6 @@ $sql = "SELECT * FROM genre";
         
     </div>
 </section>
-
-
 
 <!-- Footer Section Begin -->
 <footer class="footer">
@@ -244,7 +237,6 @@ $sql = "SELECT * FROM genre";
     </div>
 </footer>
 <!-- Footer Section End -->
-
 
 <!-- Js Plugins -->
 <script src="js/jquery-3.3.1.min.js"></script>
