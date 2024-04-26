@@ -254,7 +254,7 @@ body {
             echo '</div>';
         }
     } else {
-        echo "查無結果";ㄋ
+        echo "查無結果";
     }
       $conn->close();
     ?>
