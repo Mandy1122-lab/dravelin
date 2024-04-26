@@ -4,11 +4,12 @@ include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
 $conn = sql_open(); 
 
 // 新增
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['g_name'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == 'add' && isset($_POST['g_name'])) {
     $g_name = $_POST['g_name'];
     $sql = "INSERT INTO genre (g_name) VALUES ('$g_name')";
     mysqli_query($conn, $sql);
 }
+
 
 // 編輯
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['g_id']) && isset($_POST['g_name'])) {
