@@ -183,7 +183,7 @@ tr th,tr:nth-child(odd){
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-gap:30px;
     margin:auto auto auto 30px;
-    border-bottom:1px solid;
+    
 }
 .word{
     text-align: center;
