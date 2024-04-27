@@ -27,7 +27,12 @@
     <!--font-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
     <script src="https://kit.fontawesome.com/937e93c93c.js" crossorigin="anonymous"></script>
-    
+    <style>
+        .simage-container{
+            position: relative;
+            display: inline-block;
+        }
+    </style>
 </head>
 
 <body class="font_set">
@@ -133,7 +138,7 @@
                 $result = mysqli_query($conn, $sql);
                 if ($result) {
                     while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<div class='image-container'>";
+                        echo "<div class='simage-container'>";
                         echo "<img class='image c-img' style='width=250px !important' src='{$row['c_pic']}'>";
                         echo "<div class='text-overlay'>";
                         echo "<a href='country.php?c_id=" . $row['c_id'] . "'><p style='font-size: 30px;font-weight:bolder;color:#ffffff'>" . $row['c_name'] . "</p></a>";
@@ -157,7 +162,7 @@
                 $result = mysqli_query($conn, $sql);
                 if ($result) {
                     while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<div class='image-container'>";
+                        echo "<div class='simage-container'>";
                         echo "<img style='width: 550px !important;height:170px;border-radius: 20px;opacity:0.7' src='" . $row['sc_pic'] . "'>";
                         echo "<div class='text-overlay'>";
                         echo "<a href='list.php?sc_id=" . $row['sc_id'] . "'><p style='font-size: 25px;font-weight:bolder;color:#ffffff'>" . $row['sc_name'] . "</p></a>";
