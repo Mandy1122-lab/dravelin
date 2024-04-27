@@ -112,7 +112,7 @@
             $sql = "SELECT hotspot.h_id, spot.s_id, spot.s_name, spot.s_pic FROM hotspot JOIN spot ON hotspot.s_id = spot.s_id ORDER BY hotspot.h_id;";
             $result = mysqli_query($conn, $sql);
             if ($result) {
-                echo "<div class='hot-wrap'>";
+                echo "<div class='hot-wrap' style='border-bottom:1px solid'>";
                 while ($row = mysqli_fetch_assoc($result)) {
                     echo "<div>";
                     echo '<a href="spot-info.php?s_id=' . $row['s_id'] . '">';
@@ -130,7 +130,7 @@
             <div class="col-lg-8 col-md-8 col-sm-6 section_title">
                 <h4 class="c-title">以國家分類</h4>
             </div>
-            <div class="country" style="padding-left:30px !important;grid-gap:40px !important">
+            <div class="hot-wrap">
             <?php  
                 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
                 $conn = sql_open();
