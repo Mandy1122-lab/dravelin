@@ -130,8 +130,8 @@
             <div class="col-lg-8 col-md-8 col-sm-6 section_title">
                 <h4 class="c-title">以國家分類</h4>
             </div>
-            <div class="country">
-            <?php 
+            <div class="country" style="padding-left:15px">
+            <?php  
                 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
                 $conn = sql_open();
                 $sql = "SELECT * FROM country";
@@ -139,7 +139,7 @@
                 if ($result) {
                     while ($row = mysqli_fetch_assoc($result)) {
                         echo "<div class='simage-container'>";
-                        echo "<img class='image c-img' style='width=250px !important' src='{$row['c_pic']}'>";
+                        echo "<img class='image c-img' src='{$row['c_pic']}'>";
                         echo "<div class='text-overlay'>";
                         echo "<a href='country.php?c_id=" . $row['c_id'] . "'><p style='font-size: 30px;font-weight:bolder;color:#ffffff'>" . $row['c_name'] . "</p></a>";
                         echo "</div>";
