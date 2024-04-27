@@ -130,7 +130,7 @@
             <div class="col-lg-8 col-md-8 col-sm-6 section_title">
                 <h4 class="c-title">以國家分類</h4>
             </div>
-            <div class="country" style="padding-left:15px">
+            <div class="country" style="padding-left:30px">
             <?php  
                 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
                 $conn = sql_open();
