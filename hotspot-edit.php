@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="dec.css" type="text/css">
     <!--font-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
-    <script src="https://kit.fontawesome.com/937e93c93c.js" crossorigin="anonymous"></script>
+    
     
 
 
@@ -173,7 +173,8 @@
                                     echo "<tr>";
                                     echo "<td>{$row['s_id']}</td>";
                                     echo "<td>{$row['s_name']}</td>";
-                                    echo "<td><a href='hotspot-add.php?s_id=" . $row['s_id'] . "><i class='fa-solid fa-plus fa-lg' style='color: #1d50a1;'></i></a></td>";
+                                    echo "<td><a href='hotspot-add.php?s_id=" . $row['s_id'] . "'><i class='fa-solid fa-plus fa-lg' style='color: #1d50a1;'></i></a></td>";
+
                                     
                                     echo "</tr>";
                                 }
@@ -197,7 +198,9 @@
                                         echo "<tr>";
                                         echo "<td>{$row['s_id']}</td>";
                                         echo "<td>{$row['s_name']}</td>";
-                                        echo "<td><a href='hotspot-add.php?s_id=" . $row['s_id'] . "><i class='fa-solid fa-plus fa-lg' style='color: #1d50a1;'></i></a></td>";
+                                        echo "<td><a href='hotspot-add.php?s_id=" . $row['s_id'] . "'><i class='fa-solid fa-plus fa-lg' style='color: #1d50a1;'></i></a></td>";
+
+                                        
                                         echo "</tr>";
                                         }
                                                                     
@@ -341,6 +344,7 @@
 <script src="js/owl.carousel.min.js"></script>
 <script src="js/main.js"></script>
 <script src="confirm.js"></script>
+<script src="https://kit.fontawesome.com/937e93c93c.js" crossorigin="anonymous"></script>
 
 
 </body>
