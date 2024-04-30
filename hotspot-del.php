@@ -15,7 +15,7 @@
         }
 
         mysqli_close($conn);
-        header("Location: hotspot-edit.php");
+        header("Location:hotspot-edit.php");
         exit();
     }
 ?>
