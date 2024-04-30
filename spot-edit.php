@@ -143,7 +143,7 @@
         }
 
         mysqli_close($conn);
-        header("Location: spot-manage.php");
+        echo '<script>window.location.href = "spot-manage.php";</script>';
         exit(); 
     }
     ?>
