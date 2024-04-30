@@ -1,4 +1,4 @@
 function confirmaction() {
-    var result = confirm("是否要執行？");
+    var result = confirm("是否確定刪除？");
     return result;
 }
