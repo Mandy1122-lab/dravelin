@@ -137,14 +137,14 @@
         $sql = "UPDATE spot SET s_name = '$s_name', s_add = '$s_add', s_intro = '$s_intro', s_info = '$s_info', s_photo = '$s_photo', s_pic = '$s_pic' WHERE s_id='$s_id' ";
 
         if (mysqli_query($conn, $sql)) {
-            echo "編輯成功";
+            mysqli_close($conn);
+            echo '<script>window.location.href = "spot-manage.php";</script>';
+            exit();
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
 
-        mysqli_close($conn);
-        echo '<script>window.location.href = "spot-manage.php";</script>';
-        exit(); 
+        
     }
     ?>
 
