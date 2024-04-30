@@ -99,7 +99,6 @@
 if (isset($_POST["Insert"])) {
     include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
     $conn = sql_open();
-    // 檢查連線是否成功
     if (!$conn) {
         die("資料庫連線失敗: " . mysqli_connect_error());
     }
@@ -132,8 +131,10 @@ if (isset($_POST["Insert"])) {
 
         
         if (mysqli_query($conn, $sql)) {
-            echo "新增成功";
-            header("Location: spot-manage.php");
+            mysqli_close($conn);
+            echo '<script>window.location.href = "spot-manage.php";</script>';
+
+            exit(); 
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
@@ -158,18 +159,16 @@ if (isset($_POST["Insert"])) {
 
             
             if (mysqli_query($conn, $sql)) {
-                echo "新增成功";
-                header("Location: spot-manage.php");
-            } else {
-                echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+                mysqli_close($conn);
+                echo '<script>window.location.href = "spot-manage.php";</script>';
+                exit();
             }
         } else {
-            echo "Error: 作品不存在";
+            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+
         }
     }
 
-    mysqli_close($conn);
-    exit();
 }
 ?>
 
