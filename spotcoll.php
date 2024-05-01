@@ -7,7 +7,7 @@
     <meta name="keywords" content="Anime, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>編輯 - 熱門景點</title>
+    <title>新增 - 合輯中景點</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -26,10 +26,8 @@
     <link rel="stylesheet" href="dec.css" type="text/css">
     <!--font-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
+    <script src="https://kit.fontawesome.com/937e93c93c.js" crossorigin="anonymous"></script>
     
-    
-
-
 
     <style>
         
@@ -130,7 +128,7 @@
             <div>
                 <!--標題-->
                 <div class="section_title line">
-                    <h4>編輯 - 熱門景點</h4>
+                    <h4>新增 - 合輯中景點</h4>
                 </div>
                 <!--切割版面-->
                 <div style="display:grid;grid-template-columns:1fr 1fr">
@@ -138,79 +136,86 @@
                     <div>
                         <!--搜尋框-->
                         <form class="form-inline my-2 my-lg-0" method="post"> 
-                        <input class="form-control mr-sm-2 search" type="text" name="s_name" placeholder="搜尋欲加入清單之景點" aria-label="Search"><br>
+                        
+                    
+                        <input class="form-control mr-sm-2 search" type="text" name="s_name" placeholder="搜尋欲加入合輯之景點" aria-label="Search"><br>
                         <input class="search-btn"  type="submit" name="Search" value="&#xf002;">
                         </form>
 
                             <?php
-                        
-
+                            
                             if (isset($_POST["Search"])) {
-
+                                $sc_id = $_GET['sc_id'];
+                            
                                 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
                                 $conn = sql_open();
-
+                            
                                 $conditions = array();
-
+                            
                                 if (!empty($_POST["s_name"])) {
-                                    $s_name = "s_name LIKE '%" . mysqli_real_escape_string($conn, $_POST["s_name"]) . "%'";
+                                    $s_name = "s_name LIKE '%" . $_POST["s_name"] . "%'";
                                     $conditions[] = $s_name;
                                 }
-
-                                $sql = "SELECT s_id, s_name FROM spot";
-
+                            
+                                $sql = "SELECT spot.s_id, spot.s_name 
+                                        FROM spot 
+                                        WHERE spot.s_id NOT IN (SELECT spotcoll.s_id FROM spotcoll JOIN scomplication ON spotcoll.sc_id = scomplication.sc_id WHERE scomplication.sc_id = '$sc_id')";
+                            
                                 if (!empty($conditions)) {
-                                    $sql .= " WHERE " . implode(" AND ", $conditions);
+                                    $sql .= " AND " . implode(" AND ", $conditions); 
                                 }
-
+                            
                                 $result = mysqli_query($conn, $sql);
-
+                            
                                 echo "<table class='hs-tb'>";
                                 echo "<caption style='caption-side: top;color:#000;font-size:20px;'>搜尋結果</caption>";
                                 echo "<tr><th>編號</th><th>景點名稱</th><th>操作</th></tr>";
-                
+                            
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     echo "<tr>";
                                     echo "<td>{$row['s_id']}</td>";
                                     echo "<td>{$row['s_name']}</td>";
-                                    echo "<td><a href='hotspot-add.php?s_id=" . $row['s_id'] . "'><i class='fa-solid fa-plus fa-lg' style='color: #1d50a1;'></i></a></td>";
-
-                                    
+                                    echo "<td><a href='sc-add.php?s_id=" . $row['s_id']  . "&sc_id=" . $sc_id . "'><i class='fa-solid fa-plus fa-lg' style='color: #1d50a1;'></i></a></td>";
                                     echo "</tr>";
                                 }
-                                
+                            
                                 echo "</table>";
-
+                            
                                 mysqli_free_result($result);
-
+                            
                                 mysqli_close($conn);
                             }
                             else{
-                                include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
-                                $conn = sql_open();
-                                $sql = "SELECT s_id, s_name FROM spot WHERE s_id NOT IN (SELECT s_id FROM hotspot) ORDER BY s_id;";
-                                if ($result = mysqli_query($conn, $sql)) {
-                                    echo "<table>";
-                                    echo "<caption style='caption-side: top;color:#000;font-size:20px;'>未被列入熱門景點</caption>";
-                                    echo "<thead><tr><th>編號</th><th>景點名稱</th><th>操作</th></tr></thead>";
-                                    echo "<tbody>";
-                                    while ($row = mysqli_fetch_assoc($result)) {
-                                        echo "<tr>";
-                                        echo "<td>{$row['s_id']}</td>";
-                                        echo "<td>{$row['s_name']}</td>";
-                                        echo "<td><a href='hotspot-add.php?s_id=" . $row['s_id'] . "'><i class='fa-solid fa-plus fa-lg' style='color: #1d50a1;'></i></a></td>";
-
-                                        
-                                        echo "</tr>";
+                                if (isset($_GET["sc_id"])){
+                                    include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
+                                    $conn = sql_open();
+                                    $sc_id = $_GET["sc_id"]; 
+                                
+                                    $sql = "SELECT spot.s_id, spot.s_name 
+                                            FROM spot 
+                                            WHERE spot.s_id NOT IN (SELECT spotcoll.s_id FROM spotcoll JOIN scomplication ON spotcoll.sc_id = scomplication.sc_id WHERE scomplication.sc_id = '$sc_id')";
+                                
+                                    if ($result = mysqli_query($conn, $sql)) {
+                                        echo "<table>";
+                                        echo "<caption style='caption-side: top;color:#000;font-size:20px;'>未被列入合輯景點</caption>";
+                                        echo "<thead><tr><th>編號</th><th>景點名稱</th><th>操作</th></tr></thead>";
+                                        echo "<tbody>";
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<tr>";
+                                            echo "<td>{$row['s_id']}</td>";
+                                            echo "<td>{$row['s_name']}</td>";
+                                            echo "<td><a href='sc-add.php?s_id=" . $row['s_id'] . "&sc_id=" . $sc_id . "'><i class='fa-solid fa-plus fa-lg' style='color: #1d50a1;'></i></a></td>";
+                                            echo "</tr>";
                                         }
-                                                                    
-                                        echo "</div>";
-
+                                        echo "</tbody>";
+                                        echo "</table>";
+                                
                                         mysqli_free_result($result);
-                                        }
-
+                                    }
+                                
                                     mysqli_close($conn);
-
+                                }
+                                
                             }
                             ?>
                             </table>
@@ -232,6 +237,7 @@
                     <!--右半（目前列表）-->
                     <div>
                         <table>
+                            
                             <caption style="caption-side: top;color:#000;font-size:20px">目前列表</caption>
                                 <tr>
                                     <th>編號</th>
@@ -239,25 +245,34 @@
                                     <th>操作</th>
                                 </tr>
                                 <?php 
-                                    include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
-                                    $conn = sql_open();
-                                    $sql = "SELECT hotspot.h_id, spot.s_id, spot.s_name FROM hotspot JOIN spot ON hotspot.s_id = spot.s_id ORDER BY hotspot.h_id;";
-                                    if ($result = mysqli_query($conn, $sql)) {
-
-                                        while ($row = mysqli_fetch_assoc($result)) {
-                                            echo "<tr>";
-                                            echo "<td>{$row['h_id']}</td>";
-                                            echo "<td>{$row['s_name']}</td>";
-                                            echo "<td><a href='hotspot-del.php?h_id=" . $row['h_id'] . "' onclick='return confirmaction()'><i class='fa-solid fa-trash-can fa-lg' style='color: #de2626;'></i></a></td>";
-                                            echo "</tr>";
-                                        }
-                                        
-                                        echo "</div>";
+                                    if (isset($_GET["sc_id"])) {
+                                        include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
+                                        $conn = sql_open();
+                                        $sc_id = $_GET["sc_id"];
                                     
-                                        mysqli_free_result($result);
+                                        $sql = "SELECT spot.s_id, spot.s_name, spotcoll.spc_id 
+                                                FROM scomplication 
+                                                JOIN spotcoll ON scomplication.sc_id = spotcoll.sc_id 
+                                                JOIN spot ON spotcoll.s_id = spot.s_id 
+                                                WHERE scomplication.sc_id = '$sc_id'";
+                                                
+                                        if ($result = mysqli_query($conn, $sql)) {
+                                            while ($row = mysqli_fetch_assoc($result)) {
+                                                echo "<tr>";
+                                                echo "<td>{$row['s_id']}</td>";
+                                                echo "<td>{$row['s_name']}</td>";
+                                                echo "<td><a href='sc-del.php?spc_id=" . $row['spc_id'] . "' onclick='return confirmaction()'><i class='fa-solid fa-trash-can fa-lg' style='color: #de2626;'></i></a></td>";
+                                                echo "</tr>";
+                                            }
+                                    
+                                            echo "</div>";
+                                            
+                                            mysqli_free_result($result);
+                                        }
+                                    
+                                        mysqli_close($conn);
                                     }
-
-                                    mysqli_close($conn)
+                                    
                                     ?>
 
                                 <!-- <tr>
@@ -344,8 +359,6 @@
 <script src="js/owl.carousel.min.js"></script>
 <script src="js/main.js"></script>
 <script src="confirm.js"></script>
-<script src="https://kit.fontawesome.com/937e93c93c.js" crossorigin="anonymous"></script>
-
 
 </body>
 
