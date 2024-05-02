@@ -76,7 +76,7 @@ body {
 }
 .card img {
   width: 220px;
-  height: auto;
+  height: 320px;
   object-fit: cover;
   border-radius: 2px;
 }
@@ -92,7 +92,7 @@ body {
 }
 .back-icon {
   position: absolute;
-  top: 20px;
+  top: 32px;
   left: 20px;
   font-size: 24px;
   color: #fff;
