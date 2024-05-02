@@ -1,5 +1,5 @@
 <?php
-include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php" ;
+include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
 $conn = sql_open(); 
 $sql = "SELECT * FROM genre";
 ?>
@@ -114,61 +114,9 @@ $sql = "SELECT * FROM genre";
         <div class="loader"></div>
     </div>
 
-    <!-- Header Section Begin -->
-    <header class="header">
-        <div class="container">
-            <div class="row"> 
-                <div class="col-lg-2">
-                    <div class="heading_logo">
-                        <a href="./index.html">
-
-                            Dravelin
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-8">
-                    <div class="header__nav">
-                        <nav class="header__menu mobile-menu">
-                            <ul>
-                                <li><a href="#">劇集<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">C</a></li>
-                                        <li><a href="#">A</a></li>
-                                        <li><a href="#">A</a></li>
-                                        <li><a href="#">B</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">電影<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">C</a></li>
-                                        <li><a href="#">A</a></li>
-                                        <li><a href="#">A</a></li>
-                                        <li><a href="#">a</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">拍攝景點<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">台灣</a></li>
-                                        <li><a href="#">韓國</a></li>
-                                        <li><a href="#">日本</a></li>
-                                        <li><a href="#">泰國</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">活動專區</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="header__right">
-                        <a href="#" class="search-switch"><i class="fa-solid fa-magnifying-glass fa-lg" style="color: #ffffff;"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div id="mobile-menu-wrap"></div>
-        </div>
-    </header>
-    <!-- Header End -->
+        <?php
+        include 'header-mng.html';
+        ?>
 
     <section class="product-page spad">
         <div class="container">
@@ -182,19 +130,20 @@ $sql = "SELECT * FROM genre";
                 </div>
 
                 <?php
-                include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php" ;
-                $conn = sql_open(); 
-                $sql = "SELECT * FROM genre";
                 $result = mysqli_query($conn, $sql);
                 if (mysqli_num_rows($result) > 0) {
                     echo "<table>";
                     echo "<tr><th>#</th><th>分類</th><th>操作</th></tr>";
 
                     while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<tr data-id='{$row['g_id']}'>";
+                        echo "<tr>";
                         echo "<td>{$row['g_id']}</td>";
                         echo "<td align='center' class='g-name'>{$row['g_name']}</td>";
-                        echo "<td align='center'><i class='fa-solid fa-pen edit-icon' style='color: #1d50a1;'></i>&nbsp;&nbsp;&nbsp;<i class='fa-solid fa-trash delete-icon' style='color: #de2626;'></i></td>";
+                        echo "<td align='center'>
+                                  <i class='fa-solid fa-pen edit-icon' style='color: #1d50a1; cursor: pointer; margin-left: 10px; font-size: 20px;'></i>
+                                  <i class='fa-solid fa-trash delete-icon' style='color: #de2626; cursor: pointer; margin-left: 10px; font-size: 20px;'></i>
+                                  <i class='fa-solid fa-check save-icon' style='display: none; color: #1d50a1; cursor: pointer; margin-left: 10px; font-size: 20px;'></i>
+                              </td>";
                         echo "</tr>";
                     }
 
@@ -209,38 +158,7 @@ $sql = "SELECT * FROM genre";
     </section>
 
 
-<!-- Footer Section Begin -->
-<footer class="footer">
-    <div class="page-up">
-        <a href="#" id="scrollToTopButton"><span class="arrow_carrot-up"></span></a>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3">
-                <div class="footer__logo">
-                    <a href="./index.html"><img src="img/logo.png" alt=""></a>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="footer__nav">
-                    <ul>
-                        <li class="active"><a href="./index.html">Homepage</a></li>
-                        <li><a href="./categories.html">Categories</a></li>
-                        <li><a href="./blog.html">Our Blog</a></li>
-                        <li><a href="#">Contacts</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
 
-            </div>
-        </div>
-    </div>
-</footer>
-<!-- Footer Section End -->
 
     <!-- Js Plugins -->
     <script src="js/jquery-3.3.1.min.js"></script>
@@ -253,8 +171,48 @@ $sql = "SELECT * FROM genre";
     <script src="js/main.js"></script>
 
     <script>
+        // 新增
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('.my-btn').addEventListener('click', function () {
+                var wrapper = document.querySelector('.wrapper');
+                var row = document.createElement('div');
+                row.classList.add('row');
+
+                var nameInput = document.createElement('input');
+                nameInput.setAttribute('type', 'text');
+                nameInput.setAttribute('name', 'g_name');
+                nameInput.setAttribute('placeholder', '輸入分類');
+                nameInput.setAttribute('required', '');
+                nameInput.classList.add('col');
+                row.appendChild(nameInput);
+
+                var saveIcon = document.createElement('i');
+                saveIcon.classList.add('fa-solid', 'fa-check', 'save-icon');
+                saveIcon.style.color = '#1d50a1';
+                saveIcon.style.cursor = 'pointer';
+                saveIcon.style.marginLeft = '10px'; 
+                saveIcon.style.fontSize = '20px'; 
+                saveIcon.addEventListener('click', function() {
+                    var gName = nameInput.value;
+                    if (gName.trim() !== '') {
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('POST', 'genre-manage.php', true);
+                        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState == 4 && xhr.status == 200) {
+                                console.log('新增成功');
+                                location.reload();
+                            }
+                        };
+                        xhr.send('action=add&g_name=' + gName);
+                    } else {
+                        alert('分類名稱不能空白');
+                    }
+                });
+                row.appendChild(saveIcon);
+
+                wrapper.appendChild(row);
+                document.querySelector('.my-btn').style.display = 'none';
             });
 
             // 編輯
@@ -279,7 +237,7 @@ $sql = "SELECT * FROM genre";
                         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                         xhr.onreadystatechange = function() {
                             if (xhr.readyState == 4 && xhr.status == 200) {
-                                console.log('Updated successfully');
+                                console.log('修改成功');
                                 location.reload();
                             }
                         };
@@ -292,14 +250,14 @@ $sql = "SELECT * FROM genre";
             var deleteIcons = document.querySelectorAll('.delete-icon');
             deleteIcons.forEach(function(icon) {
                 icon.addEventListener('click', function() {
-                    if (confirm('確定要刪除這個分類嗎？')) {
+                    if (confirm('是否確定刪除？')) {
                         var row = icon.parentNode.parentNode;
                         var gId = row.getAttribute('data-id');
                         var xhr = new XMLHttpRequest();
                         xhr.open('GET', 'genre-manage.php?action=delete&g_id=' + gId, true);
                         xhr.onreadystatechange = function() {
                             if (xhr.readyState == 4 && xhr.status == 200) {
-                                console.log('Deleted successfully');
+                                console.log('刪除成功');
                                 location.reload();
                             }
                         };
