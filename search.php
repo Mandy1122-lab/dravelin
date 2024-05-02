@@ -198,7 +198,7 @@ if (isset($_POST["search"])) {
     if ($result->num_rows > 0) {
         echo '<div class="grid">';
         while($row = $result->fetch_assoc()) {
-            echo '<a href="' . $row["source"] . '.php?id=' . $row["id"] . '">';
+            echo '<a href="' . $row["source"] . '-detail.php?id=' . $row["id"] . '">';
             echo '<div class="card">';
             echo '<img src="' . $row["img"] . '">';
             echo '<h3>' . $row["name"] . '</h3>';
