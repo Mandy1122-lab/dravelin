@@ -155,7 +155,7 @@
                         <label for="inputEmail4" style="margin-top: 25px;">景點封面圖</label>
                         <input type="text" name="s_pic" class="form-control" placeholder="請輸入位置" value="<?php echo $existingData['s_pic'];?>">
                         <nobr>
-                        <button type="reset" class="btn btn-outline-primary cancel" >取消</button>
+                        <button type="reset" class="btn btn-outline-primary cancel" onclick="window.location.href='spot-manage.php'">取消</button>
                         <button type="submit" name="Update" onclick="return confirmaction()" class="btn btn-outline-primary save">儲存</button>
                         </nobr>
 
@@ -224,7 +224,7 @@
 <script src="js/jquery.slicknav.js"></script>
 <script src="js/owl.carousel.min.js"></script>
 <script src="js/main.js"></script>
-<script src="confirm.js"></script>
+
 
 </body>
 
