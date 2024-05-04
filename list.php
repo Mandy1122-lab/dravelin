@@ -142,7 +142,7 @@
             $sql = "SELECT scomplication.sc_name, spot.s_name, spot.s_pic, spot.s_info, spot.s_add, spot.s_id, production_name
             FROM spotcoll 
             JOIN spot ON spotcoll.s_id = spot.s_id 
-            JOIN scomplication ON spotcoll.s/Users/mandy/Desktop/PHP/hw4/login1.html /Users/mandy/Desktop/PHP/hw4/login.php /Users/mandy/Desktop/PHP/hw4/sample.css_id = scomplication.sc_id 
+            JOIN scomplication ON spotcoll.sc_id = scomplication.sc_id 
             LEFT JOIN (
             SELECT spotd.s_id, drama.d_name AS production_name
             FROM spotd 
