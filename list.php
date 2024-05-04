@@ -175,7 +175,7 @@
                         echo "<a href='#'><p class='s-content drama'><b>{$row['production_name']}</b></p></a>";
                         echo "</div>";
                         echo "</div>";
-                        echo "<div style='position: relative;'><a style='font-size:20px;position:absolute;bottom:12px' href='spot-info.php?s_id=" . $row['s_id'] . "'><i class='fa-regular fa-circle-info' style='color: #1d50a1;'>&nbsp;&nbsp;詳細資訊</i></a></div>";
+                        echo "<div style='position: relative;'><a style='font-size:20px;position:absolute;bottom:12px' href='spot-info.php?s_id=" . $row['s_id'] . "'><i class='fa-solid fa-circle-info' style='color: #1d50a1;'>&nbsp;&nbsp;詳細資訊</i></a></div>";
                         echo "</div>";
                     } while ($row = mysqli_fetch_assoc($result));
                 }
