@@ -29,8 +29,8 @@
     <script src="https://kit.fontawesome.com/937e93c93c.js" crossorigin="anonymous"></script>
     <style>
         .simage-container{
-            position: relative;
-            display: inline-block;
+        position: relative;
+        display: inline-block;
         }
     </style>
 </head>
@@ -42,60 +42,9 @@
     </div>
 
     <!-- Header Section Begin -->
-    <header class="header">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-2">
-                    <div class="heading_logo">
-                        <a href="./index.html">
-                            <!-- <img src="img/logo.png" alt=""> -->
-                            Dravelin
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-8">
-                    <div class="header__nav">
-                        <nav class="header__menu mobile-menu">
-                            <ul>
-                                <li><a href="#">劇集<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Categories</a></li>
-                                        <li><a href="#">Anime Details</a></li>
-                                        <li><a href="#">Anime Watching</a></li>
-                                        <li><a href="#">Blog Details</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">電影<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Categories</a></li>
-                                        <li><a href="#">Anime Details</a></li>
-                                        <li><a href="#">Anime Watching</a></li>
-                                        <li><a href="#">Blog Details</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">拍攝景點<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Categories</a></li>
-                                        <li><a href="#">Anime Details</a></li>
-                                        <li><a href="#">Anime Watching</a></li>
-                                        <li><a href="#">Blog Details</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">活動專區</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="header__right">
-                        <a href="#" class="search-switch"><i class="fa-solid fa-magnifying-glass fa-lg" style="color: #ffffff;"></i></a>
-                        <!-- <a href="./login.html"><span class="icon_profile"></span></a> -->
-                    </div>
-                </div>
-            </div>
-            <div id="mobile-menu-wrap"></div>
-        </div>
-    </header>
+    <?php 
+        require 'header.html';
+    ?>
     <!-- Header End -->
     
 
@@ -112,7 +61,7 @@
             $sql = "SELECT hotspot.h_id, spot.s_id, spot.s_name, spot.s_pic FROM hotspot JOIN spot ON hotspot.s_id = spot.s_id ORDER BY hotspot.h_id;";
             $result = mysqli_query($conn, $sql);
             if ($result) {
-                echo "<div class='hot-wrap' style='border-bottom:1px solid'>";
+                echo "<div class='hot-wrap line'>";
                 while ($row = mysqli_fetch_assoc($result)) {
                     echo "<div>";
                     echo '<a href="spot-info.php?s_id=' . $row['s_id'] . '">';
@@ -130,8 +79,8 @@
             <div class="col-lg-8 col-md-8 col-sm-6 section_title">
                 <h4 class="c-title">以國家分類</h4>
             </div>
-            <div class='hot-wrap'>
-            <?php  
+            <div style="width: 100%;display: grid;grid-template-columns: 1fr 1fr 1fr 1fr;grid-gap:30px;margin:auto auto auto 30px;">
+            <?php 
                 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
                 $conn = sql_open();
                 $sql = "SELECT * FROM country";
@@ -139,7 +88,7 @@
                 if ($result) {
                     while ($row = mysqli_fetch_assoc($result)) {
                         echo "<div class='simage-container'>";
-                        echo "<img class='image c-img' src='{$row['c_pic']}'>";
+                        echo "<img class=' c-img' style='width: 250px !important;height:170px;border-radius: 20px;' src='{$row['c_pic']}'>";
                         echo "<div class='text-overlay'>";
                         echo "<a href='country.php?c_id=" . $row['c_id'] . "'><p style='font-size: 30px;font-weight:bolder;color:#ffffff'>" . $row['c_name'] . "</p></a>";
                         echo "</div>";
