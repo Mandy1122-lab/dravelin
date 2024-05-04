@@ -184,7 +184,7 @@
                 <div class="wrapper">
                     <form class="form-inline my-2 my-lg-0" method="post">
                     <input class="form-control mr-sm-2 search" type="text" placeholder="搜尋合輯" aria-label="Search" name="sc_name">
-                    <input class="search-btn"  type="submit" name="Search" value="&#xf002;">
+                    <button type="submit" name="Search" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </form>
                     <button onclick="window.location.href='spotcoll-add.php'" type="button" class="btn btn-outline-primary my-btn">＋&nbsp;新增合輯</button>
                 </div>
