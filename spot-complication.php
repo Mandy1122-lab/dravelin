@@ -127,7 +127,7 @@
 
 
     <!-- Product Section Begin -->
-    <section class="product-page spad" style="margin-top:-30px">
+    <section class="product-page spad" style="margin-top:-30px !important">
         <div class="container">
             <div>
                 <div class="section_title line">
