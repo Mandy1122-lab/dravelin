@@ -119,12 +119,15 @@
     <!-- Header Section Begin -->
     <?php 
     include 'header-mng.html';
+    echo "<br>";
+    echo "<a href='spot-manage.php' style='margin-left:150px'><i class='fa-solid fa-arrow-left fa-xl' style='color: #1d50a1;'></i></a>";
+
     ?>
     <!-- Header End -->
 
 
     <!-- Product Section Begin -->
-    <section class="product-page spad">
+    <section class="product-page spad" style="margin-top:-30px">
         <div class="container">
             <div>
                 <div class="section_title line">
