@@ -7,7 +7,7 @@
     <meta name="keywords" content="Anime, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>景點列表</title>
+    <title>景點管理</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -48,7 +48,7 @@
         <div class="container">
             <div>
                 <div class="section_title line">
-                    <h4>景點管理列表</h4>
+                    <h4>景點列表</h4>
                 </div>
 
                 <div class="wrapper">
