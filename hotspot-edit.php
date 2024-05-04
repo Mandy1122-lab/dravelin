@@ -202,7 +202,7 @@
                                             echo "<tr>";
                                             echo "<td>{$row['h_id']}</td>";
                                             echo "<td>{$row['s_name']}</td>";
-                                            echo "<td><a href='hotspot-del.php?h_id=" . $row['h_id'] . "' onclick='return confirmaction()'><i class='fa-solid fa-trash-can fa-lg' style='color: #de2626;'></i></a></td>";
+                                            echo "<td><a href='hotspot-del.php?h_id=" . $row['h_id'] . "' onclick='return confirmaction()'><i class='fa-solid fa-trash trash'></i></a></td>";
                                             echo "</tr>";
                                         }
                                         
