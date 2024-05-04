@@ -162,60 +162,12 @@
     </div>
 
     <!-- Header Section Begin -->
-    <header class="header">
-        <div class="container">
-            <div class="row"> 
-                <div class="col-lg-2">
-                    <div class="heading_logo">
-                        <a href="./index.html">
-                            <!-- <img src="img/logo.png" alt=""> -->
-                            Dravelin
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-8">
-                    <div class="header__nav">
-                        <nav class="header__menu mobile-menu">
-                            <ul>
-                                <li><a href="#">劇集<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Categories</a></li>
-                                        <li><a href="#">Anime Details</a></li>
-                                        <li><a href="#">Anime Watching</a></li>
-                                        <li><a href="#">Blog Details</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">電影<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Categories</a></li>
-                                        <li><a href="#">Anime Details</a></li>
-                                        <li><a href="#">Anime Watching</a></li>
-                                        <li><a href="#">Blog Details</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">拍攝景點<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Categories</a></li>
-                                        <li><a href="#">Anime Details</a></li>
-                                        <li><a href="#">Anime Watching</a></li>
-                                        <li><a href="#">Blog Details</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">活動專區</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="header__right">
-                        <a href="#" class="search-switch"><i class="fa-solid fa-magnifying-glass fa-lg" style="color: #ffffff;"></i></a>
-                        <!-- <a href="./login.html"><span class="icon_profile"></span></a> -->
-                    </div>
-                </div>
-            </div>
-            <div id="mobile-menu-wrap"></div>
-        </div>
-    </header>
+    <?php 
+    include 'header-mng.html';
+    echo "<br>";
+    echo "<a href='spot-complication.php' style='margin-left:150px'><i class='fa-solid fa-arrow-left fa-xl' style='color: #1d50a1;'></i></a>";
+
+    ?>
     <!-- Header End -->
     <!--帶入資料-->
     <?php 
@@ -267,14 +219,25 @@
 
 
     <!-- Product Section Begin -->
-    <section class="product-page spad">
+    <section class="product-page spad" style="margin-top: -30px !important;">
         <div class="container">
             <div>
                 <!--標題-->
                 <div class="section_title">
                     <nobr>
                     <h4 style="display: inline-block !important;">編輯、刪除 - 景點合輯</h4>
-                    <button type="delete" class="btn btn-outline-primary delete" style="margin-left:64%;display: inline-block !important;">刪除合輯</button>
+                    <button type="button" class="btn btn-outline-primary delete" style="margin-left:64%;display: inline-block !important;" onclick="return confirmAction(<?php echo $row['sc_id']; ?>)">刪除合輯</button>
+                    <script>
+                        function confirmAction(sc_id) {
+                            
+                            var result = confirm("是否確認刪除？");
+                            if (result) {
+                                window.location.href = 'spotcoll-del.php?sc_id=' + sc_id;
+                            }
+                            return false;
+                        }
+                        </script>
+                    
                     </nobr>
                 </div>
                 <!--切割版面-->
@@ -294,7 +257,8 @@
                     <!--右半（目前列表）-->
                     <div style="padding-top:270px">
                         <nobr>
-                        <button type="reset" class="btn btn-outline-primary cancel" >取消</button>
+                        <button type="reset" onclick="window.location.href='spot-complication.php'" class="btn btn-outline-primary cancel" >取消</button>
+                        
                         <button type="submit" name="Update" class="btn btn-outline-primary save" >儲存</button>
                         </nobr>
                     </div>
