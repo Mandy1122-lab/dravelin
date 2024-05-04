@@ -92,16 +92,16 @@ include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
 $conn = sql_open();
 $c_id = $_GET["c_id"];
 $sql = "SELECT 
-            country.c_name, 
-            spot.s_name, 
-            spot.s_pic, 
-            spot.s_info, 
-            spot.s_add, 
-            spot.s_id, 
-            GROUP_CONCAT(DISTINCT drama.d_name ORDER BY drama.d_name SEPARATOR '、') AS drama_names,
-            GROUP_CONCAT(DISTINCT movie.m_name ORDER BY movie.m_name SEPARATOR '、') AS movie_names,
-            GROUP_CONCAT(DISTINCT drama.d_id ORDER BY drama.d_name SEPARATOR ',') AS drama_ids,
-            GROUP_CONCAT(DISTINCT movie.m_id ORDER BY movie.m_name SEPARATOR ',') AS movie_ids
+        country.c_name, 
+        spot.s_name, 
+        spot.s_pic, 
+        spot.s_info, 
+        spot.s_add, 
+        spot.s_id, 
+        GROUP_CONCAT(DISTINCT drama.d_name ORDER BY drama.d_name SEPARATOR '、') AS drama_names,
+        GROUP_CONCAT(DISTINCT movie.m_name ORDER BY movie.m_name SEPARATOR '、') AS movie_names,
+        GROUP_CONCAT(DISTINCT drama.d_id ORDER BY drama.d_name SEPARATOR ',') AS d_id,
+        GROUP_CONCAT(DISTINCT movie.m_id ORDER BY movie.m_name SEPARATOR ',') AS m_id
         FROM 
             cspot 
         JOIN 
@@ -143,13 +143,14 @@ if ($result = mysqli_query($conn, $sql)) {
         echo "<p class='s-content'><b>在此取景作品</b></p>";
 
         
-        if (!empty($row['movie_names']) && !empty($row['movie_ids'])) {
-            echo "<a href='movie-detail.php?m_id=" . $row['movie_ids'] . "'><p class='s-content drama'><b>{$row['movie_names']}</b></p></a>";
+        if (!empty($row['movie_names'])) {
+            echo "<a href='movie-detail.php?m_id=" . $row['m_id'] . "'><p class='s-content drama'><b>{$row['movie_names']}</b></p></a>";
         }
         
-        if (!empty($row['drama_names']) && !empty($row['drama_ids'])) {
-            echo "<a href='drama-detail.php?d_id=" . $row['drama_ids'] . "'><p class='s-content drama'><b>{$row['drama_names']}</b></p></a>";
+        if (!empty($row['drama_names'])) {
+            echo "<a href='drama-detail.php?d_id=" . $row['d_id'] . "'><p class='s-content drama'><b>{$row['drama_names']}</b></p></a>";
         }
+        
         
 
         echo "</div>";
@@ -168,106 +169,7 @@ mysqli_close($conn);
 
 
 
-            <!-- <div class="col-lg-8 col-md-8 col-sm-6 section_title" style="display:grid; grid-template-columns: 1fr 5fr;">
-                
-                <a href="spot.php" style="align-self: center;"><i class="fa-solid fa-angles-left fa-xl" style="color: #1d50a1;">&nbsp;&nbsp;台灣</i></a>
-                <select style='align-self: center !important;' class='form-control select' id='exampleFormControlSelect1'>
-                    <option style='font-size:24px'>選擇城市</option>
-                    <option style='font-size:24px'>台北市</option>
-                    <option style='font-size:24px'>新北市</option>
-                    <option style='font-size:24px'>基隆市</option>
-                    <option style='font-size:24px'>桃園市</option>
-                    <option style='font-size:24px'>新竹縣</option>
-                    <option style='font-size:24px'>其他</option>
-                </select>
-            </div> -->
-
-            <!-- <div style='display:grid;grid-template-columns:2fr 5fr 1fr;grid-gap:30px;margin:auto auto auto 30px;padding-top:30px;width:100%;border-top:1px solid;'>
-                <div>
-                    <img style="width: 250px !important;height:170px;border-radius: 20px;" src="https://cdn2.ettoday.net/images/4724/d4724610.jpg">
-                </div>
-                <div>
-                    <p style="font-size:24px;"><b>小半樓 Art Space</b></p>
-                    <div style="display: grid;grid-template-columns:1fr 4fr;width:100%;grid-gap:2px">
-                    <p style="font-size:20px;"><b>地址</b></p>
-                    <p style="font-size:20px;">700台南市中西區民權路一段199巷7號</p>
-                    <p style="font-size:20px;"><b>景點資訊</b></p>
-                    <p style="font-size:20px;">營業時間：週三-週六14:00~19:00(週日、一、二公休)</p>
-                    <br>
-                    <p style="font-size:20px;">電話：0982 816 009</p>
-                    <p style="font-size:20px;color:#1D50A1"><b>在此取景作品</b></p>
-                    <p style="font-size:20px;color:#1D50A1"><b><a>想見你</a></b></p>
-                    </div>
-                    
-                </div>
-                <div style="position: relative;"><a style="font-size:20px;position:absolute;bottom:12px" href=""><i class="fa-regular fa-circle-info" style="color: #1d50a1;">&nbsp;&nbsp;詳細資訊</i></a></div>
-                
-                
-            </div>
-            <div style="display:grid;grid-template-columns:2fr 5fr 1fr;grid-gap:30px;margin:auto auto auto 30px;padding-top:30px;width:100%;border-top:1px solid;">
-                <div>
-                    <img style="width: 250px !important;height:170px;border-radius: 20px;" src="https://img.13shaniu.tw/uploads/20200511221842_72.jpeg">
-                </div>
-                <div>
-                    <p style="font-size:24px;"><b>龍泉冰店</b></p>
-                    <div style="display: grid;grid-template-columns:1fr 4fr;width:100%;grid-gap:2px">
-                    <p style="font-size:20px;"><b>地址</b></p>
-                    <p style="font-size:20px;">721台南市麻豆區平等路2-4號</p>
-                    <p style="font-size:20px;"><b>景點資訊</b></p>
-                    <p style="font-size:20px;">營業時間：週一、週四-週日08:00~18:00(週二、三公休)</p>
-                    <br>
-                    <p style="font-size:20px;">電話：06 572 1796</p>
-                    <p style="font-size:20px;color:#1D50A1"><b>在此取景作品</b></p>
-                    <p style="font-size:20px;color:#1D50A1"><b><a>想見你</a></b></p>
-                    </div>
-                    
-                </div>
-                <div style="position: relative;"><a style="font-size:20px;position:absolute;bottom:12px" href=""><i class="fa-regular fa-circle-info" style="color: #1d50a1;">&nbsp;&nbsp;詳細資訊</i></a></div>
-                
-            </div>
-            <div style="display:grid;grid-template-columns:2fr 5fr 1fr;grid-gap:30px;margin:auto auto auto 30px;padding-top:30px;width:100%;border-top:1px solid;">
-                <div>
-                    <img style="width: 250px !important;height:170px;border-radius: 20px;" src="https://vickylife.com/wp-content/uploads/2023/09/台南鍋燒意麵︱閒情茗品屋：在樹蔭下享受鍋燒意麵真的好愜意啊！順便回味一下電視劇想見你的場景-12.jpg">
-                </div>
-                <div>
-                    <p style="font-size:24px;"><b>閒情茗品屋</b></p>
-                    <div style="display: grid;grid-template-columns:1fr 4fr;width:100%;grid-gap:2px">
-                    <p style="font-size:20px;"><b>地址</b></p>
-                    <p style="font-size:20px;">702台南市南區金華路二段57巷97號</p>
-                    <p style="font-size:20px;"><b>景點資訊</b></p>
-                    <p style="font-size:20px;">營業時間：週一-週日06:30~18:00(週日到14:00)</p>
-                    <br>
-                    <p style="font-size:20px;">電話：06 265 1951</p>
-                    <p style="font-size:20px;color:#1D50A1"><b>在此取景作品</b></p>
-                    <p style="font-size:20px;color:#1D50A1"><b><a>想見你</a></b></p>
-
-                    </div>
-                    
-                </div>
-                <div style="position: relative;"><a style="font-size:20px;position:absolute;bottom:12px" href=""><i class="fa-regular fa-circle-info" style="color: #1d50a1;">&nbsp;&nbsp;詳細資訊</i></a></div>
-                
-            </div>
-            <div style="display:grid;grid-template-columns:2fr 5fr 1fr;grid-gap:30px;margin:auto auto auto 30px;padding-top:30px;width:100%;border-top:1px solid;">
-                <div>
-                    <img style="width: 250px !important;height:170px;border-radius: 20px;" src="https://imgs.gvm.com.tw/upload/gallery/20200414/72130_01.jpg">
-                </div>
-                <div>
-                    <p style="font-size:24px;"><b>鳳和高中</b></p>
-                    <div style="display: grid;grid-template-columns:1fr 4fr;width:100%;grid-gap:2px">
-                    <p style="font-size:20px;"><b>地址</b></p>
-                    <p style="font-size:20px;">736台南市柳營區中山東路二段1330號</p>
-                    <p style="font-size:20px;"><b>景點資訊</b></p>
-                    <p style="font-size:20px;">電話：0907 441 271</p>
-                    <p style="font-size:20px;color:#1D50A1"><b>在此取景作品</b></p>
-                    <p style="font-size:20px;color:#1D50A1"><b><a>想見你</a></b></p>
-
-                    </div>
-                    
-                </div>
-                <div style="position: relative;"><a style="font-size:20px;position:absolute;bottom:12px" href=""><i class="fa-regular fa-circle-info" style="color: #1d50a1;">&nbsp;&nbsp;詳細資訊</i></a></div>
-                
-            </div> -->
-
+            
             
         </div>
     </section>
