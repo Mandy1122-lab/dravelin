@@ -55,6 +55,7 @@
         }
         
         
+        
 
 
     </style>
@@ -139,7 +140,8 @@
                         <!--搜尋框-->
                         <form class="form-inline my-2 my-lg-0" method="post"> 
                         <input class="form-control mr-sm-2 search" type="text" name="s_name" placeholder="搜尋欲加入清單之景點" aria-label="Search"><br>
-                        <input class="search-btn"  type="submit" name="Search" value="&#xf002;">
+                        <button type="submit" name="Search" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        
                         </form>
 
                             <?php
