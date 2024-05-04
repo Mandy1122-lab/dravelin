@@ -54,7 +54,6 @@
         
         
 
-
     </style>
 </head>
 
@@ -65,65 +64,17 @@
     </div>
 
     <!-- Header Section Begin -->
-    <header class="header">
-        <div class="container">
-            <div class="row"> 
-                <div class="col-lg-2">
-                    <div class="heading_logo">
-                        <a href="./index.html">
-                            <!-- <img src="img/logo.png" alt=""> -->
-                            Dravelin
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-8">
-                    <div class="header__nav">
-                        <nav class="header__menu mobile-menu">
-                            <ul>
-                                <li><a href="#">劇集<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Categories</a></li>
-                                        <li><a href="#">Anime Details</a></li>
-                                        <li><a href="#">Anime Watching</a></li>
-                                        <li><a href="#">Blog Details</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">電影<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Categories</a></li>
-                                        <li><a href="#">Anime Details</a></li>
-                                        <li><a href="#">Anime Watching</a></li>
-                                        <li><a href="#">Blog Details</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">拍攝景點<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Categories</a></li>
-                                        <li><a href="#">Anime Details</a></li>
-                                        <li><a href="#">Anime Watching</a></li>
-                                        <li><a href="#">Blog Details</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">活動專區</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="header__right">
-                        <a href="#" class="search-switch"><i class="fa-solid fa-magnifying-glass fa-lg" style="color: #ffffff;"></i></a>
-                        <!-- <a href="./login.html"><span class="icon_profile"></span></a> -->
-                    </div>
-                </div>
-            </div>
-            <div id="mobile-menu-wrap"></div>
-        </div>
-    </header>
+    <?php 
+    include 'header-mng.html';
+    echo "<br>";
+    echo "<a href='spot-complication.php' style='margin-left:150px'><i class='fa-solid fa-arrow-left fa-xl' style='color: #1d50a1;'></i></a>";
+
+    ?>
     <!-- Header End -->
 
 
     <!-- Product Section Begin -->
-    <section class="product-page spad">
+    <section class="product-page spad" style="margin-top:-30px">
         <div class="container">
             <div>
                 <!--標題-->
@@ -276,26 +227,10 @@
                                     
                                     ?>
 
-                                <!-- <tr>
-                                    <td>1</td>
-                                    <td>豬米超市</td>
-                                    <td><a href=""><i class="fa-solid fa-trash-can fa-lg" style="color: #de2626;"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>SKY 披薩</td>
-                                    <td><a href=""><i class="fa-solid fa-trash-can fa-lg" style="color: #de2626;"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>珍棧神奇小吃</td>
-                                    <td><a href=""><i class="fa-solid fa-trash-can fa-lg" style="color: #de2626;"></i></a></td>
-                                </tr> -->
+                                
                             </table>
-                            <!-- <nobr>
-                        <button type="reset" class="btn btn-outline-primary cancel" >取消</button>
-                        <button type="submit" class="btn btn-outline-primary save" >儲存</button>
-                        </nobr> -->
+                            <button style="margin-left:460px" class="btn btn-outline-primary save" onclick="window.location.href='spot-complication.php'">儲存</button>
+                            
                     </div>
                 </div>    
     
