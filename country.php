@@ -99,7 +99,9 @@ $sql = "SELECT
             spot.s_add, 
             spot.s_id, 
             GROUP_CONCAT(DISTINCT drama.d_name ORDER BY drama.d_name SEPARATOR '、') AS drama_names,
-            GROUP_CONCAT(DISTINCT movie.m_name ORDER BY movie.m_name SEPARATOR '、') AS movie_names
+            GROUP_CONCAT(DISTINCT movie.m_name ORDER BY movie.m_name SEPARATOR '、') AS movie_names,
+            GROUP_CONCAT(DISTINCT drama.d_id ORDER BY drama.d_name SEPARATOR ',') AS drama_ids,
+            GROUP_CONCAT(DISTINCT movie.m_id ORDER BY movie.m_name SEPARATOR ',') AS movie_ids
         FROM 
             cspot 
         JOIN 
@@ -118,6 +120,7 @@ $sql = "SELECT
             country.c_id = '$c_id'
         GROUP BY 
             spot.s_id";
+
 
 if ($result = mysqli_query($conn, $sql)) {
     if ($row = mysqli_fetch_assoc($result)) {
@@ -140,14 +143,14 @@ if ($result = mysqli_query($conn, $sql)) {
         echo "<p class='s-content'><b>在此取景作品</b></p>";
 
         
-        if (!empty($row['movie_names'])) {
-            echo "<a href='movie-detail.php?d_id=" . $row['d_id'] . "'><p class='s-content drama'><b>{$row['movie_names']}</b></p></a>";
+        if (!empty($row['movie_names']) && !empty($row['movie_ids'])) {
+            echo "<a href='movie-detail.php?m_id=" . $row['movie_ids'] . "'><p class='s-content drama'><b>{$row['movie_names']}</b></p></a>";
         }
-
         
-        if (!empty($row['drama_names'])) {
-            echo "<a href='drama-detail.php?m_id=" . $row['m_id'] . "'><p class='s-content drama'><b>{$row['drama_names']}</b></p></a>";
+        if (!empty($row['drama_names']) && !empty($row['drama_ids'])) {
+            echo "<a href='drama-detail.php?d_id=" . $row['drama_ids'] . "'><p class='s-content drama'><b>{$row['drama_names']}</b></p></a>";
         }
+        
 
         echo "</div>";
         echo "</div>";
