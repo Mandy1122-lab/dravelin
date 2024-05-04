@@ -7,7 +7,7 @@
     <meta name="keywords" content="Anime, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>國家</title>
+    <title>景點資訊</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -37,60 +37,12 @@
     </div>
 
     <!-- Header Section Begin -->
-    <header class="header">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-2">
-                    <div class="heading_logo">
-                        <a href="./index.html">
-                            <!-- <img src="img/logo.png" alt=""> -->
-                            Dravelin
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-8">
-                    <div class="header__nav">
-                        <nav class="header__menu mobile-menu">
-                            <ul>
-                                <li><a href="#">劇集<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Categories</a></li>
-                                        <li><a href="#">Anime Details</a></li>
-                                        <li><a href="#">Anime Watching</a></li>
-                                        <li><a href="#">Blog Details</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">電影<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Categories</a></li>
-                                        <li><a href="#">Anime Details</a></li>
-                                        <li><a href="#">Anime Watching</a></li>
-                                        <li><a href="#">Blog Details</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">拍攝景點<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Categories</a></li>
-                                        <li><a href="#">Anime Details</a></li>
-                                        <li><a href="#">Anime Watching</a></li>
-                                        <li><a href="#">Blog Details</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">活動專區</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="header__right">
-                        <a href="#" class="search-switch"><i class="fa-solid fa-magnifying-glass fa-lg" style="color: #ffffff;"></i></a>
-                        <!-- <a href="./login.html"><span class="icon_profile"></span></a> -->
-                    </div>
-                </div>
-            </div>
-            <div id="mobile-menu-wrap"></div>
-        </div>
-    </header>
+    <?php 
+    include 'header.html';
+    echo "<br>";
+    echo "<a href='spot.php' style='margin-left:150px'><i class='fa-solid fa-arrow-left fa-xl' style='color: #1d50a1;'></i></a>";
+
+    ?>
     <!-- Header End -->
 
 
@@ -101,11 +53,25 @@
             include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
             $conn = sql_open();
             $s_id = mysqli_real_escape_string($conn, $_GET["s_id"]);
-            $sql = "SELECT * from spot WHERE s_id ='$s_id'";
+            $sql = "
+            SELECT spot.*, 
+            GROUP_CONCAT(DISTINCT drama.d_name ORDER BY drama.d_name SEPARATOR '、') AS drama_names,
+            GROUP_CONCAT(DISTINCT movie.m_name ORDER BY movie.m_name SEPARATOR '、') AS movie_names,
+            GROUP_CONCAT(DISTINCT drama.d_id ORDER BY drama.d_name SEPARATOR ',') AS d_id,
+            GROUP_CONCAT(DISTINCT movie.m_id ORDER BY movie.m_name SEPARATOR ',') AS m_id
+            FROM spot
+            LEFT JOIN spotd ON spot.s_id = spotd.s_id
+            LEFT JOIN drama ON spotd.d_id = drama.d_id
+            LEFT JOIN spotm ON spot.s_id = spotm.s_id
+            LEFT JOIN movie ON spotm.m_id = movie.m_id
+            WHERE spot.s_id = '$s_id'
+            GROUP BY spot.s_id, spot.s_name;
+
+            ";
             $result = mysqli_query($conn, $sql);
             if ($result) {
                 while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<div class='up-wrap'>";
+                    echo "<div class='up-wrap' style='margin-top:-30px'>";
                     echo "<div><img class='s-cover' style='width: 360px !important;' src='{$row['s_pic']}'></div>";
                     echo "<div>";
                     echo "<p class='s-topic'><b>{$row['s_name']}</b></p>";
@@ -115,7 +81,14 @@
                     echo "<p class='s-content'><b>景點資訊</b></p>";
                     echo "<p class='s-content'>{$row['s_info']}</p>";
                     echo "<p class='s-content'><b>在此取景作品</b></p>";
-                    echo "<p class='s-content'><b><a href='drama.php?s_id=" . $row['s_id'] . "' class='drama'>{$row['s_name']}</a></b></p>";
+                    echo "<p class='s-content'><b>";
+                    if (!empty($row['drama_names'])) {
+                        echo "<a href='drama-detail.php?d_id=" . $row['d_id'] . "' class='drama'>{$row['drama_names']}</a>";
+                    }
+                    if (!empty($row['movie_names'])) {
+                        echo "<a href='movie-detail.php?s_id=" . $row['m_id'] . "' class='movie'>{$row['movie_names']}</a>";
+                    }
+                    echo "</b></p>";
                     echo "</div>";
                     echo "</div>";
                     echo "</div>";
