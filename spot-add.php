@@ -39,60 +39,12 @@
     </div>
 
     <!-- Header Section Begin -->
-    <header class="header">
-        <div class="container">
-            <div class="row"> 
-                <div class="col-lg-2">
-                    <div class="heading_logo">
-                        <a href="./index.html">
-                            <!-- <img src="img/logo.png" alt=""> -->
-                            Dravelin
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-8">
-                    <div class="header__nav">
-                        <nav class="header__menu mobile-menu">
-                            <ul>
-                                <li><a href="#">劇集<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Categories</a></li>
-                                        <li><a href="#">Anime Details</a></li>
-                                        <li><a href="#">Anime Watching</a></li>
-                                        <li><a href="#">Blog Details</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">電影<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Categories</a></li>
-                                        <li><a href="#">Anime Details</a></li>
-                                        <li><a href="#">Anime Watching</a></li>
-                                        <li><a href="#">Blog Details</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">拍攝景點<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Categories</a></li>
-                                        <li><a href="#">Anime Details</a></li>
-                                        <li><a href="#">Anime Watching</a></li>
-                                        <li><a href="#">Blog Details</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">活動專區</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="header__right">
-                        <a href="#" class="search-switch"><i class="fa-solid fa-magnifying-glass fa-lg" style="color: #ffffff;"></i></a>
-                        <!-- <a href="./login.html"><span class="icon_profile"></span></a> -->
-                    </div>
-                </div>
-            </div>
-            <div id="mobile-menu-wrap"></div>
-        </div>
-    </header>
+    <?php 
+    include 'header-mng.html';
+    echo "<br>";
+    echo "<a href='spot-manage.php' style='margin-left:150px'><i class='fa-solid fa-arrow-left fa-xl' style='color: #1d50a1;'></i></a>";
+
+    ?>
     <!-- Header End -->
     <!--新增景點PHP-->
     <?php 
@@ -179,7 +131,7 @@ if (isset($_POST["Insert"])) {
     <section class="product-page spad">
         <div class="container"> 
             <div>
-                <div class="section_title line">
+                <div class="section_title line" style='margin-top:-30px'>
                     
                     <h4>新增 - 景點介紹</h4>
                     
@@ -298,7 +250,7 @@ if (isset($_POST["Insert"])) {
 <script src="js/jquery.slicknav.js"></script>
 <script src="js/owl.carousel.min.js"></script>
 <script src="js/main.js"></script>
-<script src="confirmsave.js"></script>
+
 
 </body>
 
