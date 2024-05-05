@@ -190,13 +190,13 @@ $sql = "SELECT * FROM genre";
                 saveIcon.classList.add('fa-solid', 'fa-check', 'save-icon');
                 saveIcon.style.color = '#1d50a1';
                 saveIcon.style.cursor = 'pointer';
-                saveIcon.style.marginLeft = '10px'; 
+                saveIcon.style.marginLeft = '25px'; 
                 saveIcon.style.fontSize = '20px'; 
                 saveIcon.addEventListener('click', function() {
                     var gName = nameInput.value;
                     if (gName.trim() !== '') {
                         var xhr = new XMLHttpRequest();
-                        xhr.open('POST', 'genre-manage.php', true);
+                        xhr.open('POST', 'genre_manage.php', true);
                         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                         xhr.onreadystatechange = function() {
                             if (xhr.readyState == 4 && xhr.status == 200) {
@@ -215,29 +215,41 @@ $sql = "SELECT * FROM genre";
                 document.querySelector('.my-btn').style.display = 'none';
             });
 
-           // 編輯
-            var editIcons = document.querySelectorAll('.edit-icon');
-                editIcons.forEach(function(icon) {
-                icon.addEventListener('click', function() {
-            var row = icon.parentNode.parentNode;
+// 編輯
+var editIcons = document.querySelectorAll('.edit-icon');
+editIcons.forEach(function(icon) {
+    icon.addEventListener('click', function() {
+        var row = icon.parentNode.parentNode;
+        var nameCell = row.querySelector('.g-name');
+        var originalName = nameCell.textContent.trim();
+
+
+        var nameInput = document.createElement('input');
+        nameInput.setAttribute('type', 'text');
+        nameInput.setAttribute('value', originalName);
+        nameCell.textContent = '';
+        nameCell.appendChild(nameInput);
+
+        icon.classList.remove('fa-pen');
+        icon.classList.add('fa-save');
+
+        icon.addEventListener('click', function() {
+            var newName = nameInput.value;
             var gId = row.getAttribute('data-id');
-            var newName = prompt('請輸入新的分類名稱');
-            if (newName !== null && newName.trim() !== '') {
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'genre-manage.php', true);
+            xhr.open('POST', 'genre_manage.php', true);
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4 && xhr.status == 200) {
-                    console.log('編輯成功');
+                    console.log('修改成功');
                     location.reload();
                 }
             };
-            xhr.send('action=edit&g_id=' + gId + '&g_name=' + newName);
-            } else {
-            alert('請輸入有效的分類名稱');
-            }
-            });
+            xhr.send('g_id=' + gId + '&g_name=' + newName);
         });
+    });
+});
+
 
 // 刪除
 var deleteIcons = document.querySelectorAll('.delete-icon');
@@ -247,7 +259,7 @@ deleteIcons.forEach(function(icon) {
             var row = icon.parentNode.parentNode;
             var gId = row.getAttribute('data-id');
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'genre-manage.php?action=delete&g_id=' + gId, true);
+            xhr.open('GET', 'genre_manage.php?action=delete&g_id=' + gId, true);
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     console.log('刪除成功');

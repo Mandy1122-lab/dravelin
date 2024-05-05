@@ -8,24 +8,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
     $g_name = $_POST['g_name'];
     $sql = "INSERT INTO genre (g_name) VALUES ('$g_name')";
     mysqli_query($conn, $sql);
+    exit();
 }
 
 
 // 編輯
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['g_id']) && isset($_POST['g_name'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == 'edit' && isset($_POST['g_id']) && isset($_POST['g_name'])) {
     $g_id = $_POST['g_id'];
     $g_name = $_POST['g_name'];
     $sql = "UPDATE genre SET g_name='$g_name' WHERE g_id='$g_id'";
-    mysqli_query($conn, $sql);
+    if (mysqli_query($conn, $sql)) {
+        echo "Record updated successfully";
+    } else {
+        echo "Error updating record: " . mysqli_error($conn);
+    }
+    exit();
 }
 
 // 刪除
-if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['g_id'])) {
+
+if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['g_id'])) {
     $g_id = $_GET['g_id'];
     $sql = "DELETE FROM genre WHERE g_id='$g_id'";
-    mysqli_query($conn, $sql);
-
-    header("Location: genre.php");
+    if (mysqli_query($conn, $sql)) {
+        echo "刪除成功";
+    } else {
+        echo "刪除失敗" . mysqli_error($conn);
+    }
     exit();
 }
 
