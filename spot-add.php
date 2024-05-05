@@ -72,7 +72,7 @@ if (isset($_POST["Insert"])) {
         $production_id = $row['m_id'];
 
         
-        $sql = "INSERT INTO spot (s_name, s_add, s_info, s_intro, s_photo, s_pic) VALUES ('$s_name', '$s_add', '$s_info', '$s_intro', '$s_photo', '$s_pic')";
+        $sql = "INSERT INTO spot (s_name, s_add, s_info, s_intro, s_photo, s_pic, lat_lon) VALUES ('$s_name', '$s_add', '$s_info', '$s_intro', '$s_photo', '$s_pic', '$lat_lon')";
         mysqli_query($conn, $sql);
 
         
@@ -100,7 +100,7 @@ if (isset($_POST["Insert"])) {
             $production_id = $row['d_id'];
 
             
-            $sql = "INSERT INTO spot (s_name, s_add, s_info, s_intro, s_photo, s_pic) VALUES ('$s_name', '$s_add', '$s_info', '$s_intro', '$s_photo', '$s_pic')";
+            $sql = "INSERT INTO spot (s_name, s_add, s_info, s_intro, s_photo, s_pic, lat_lon) VALUES ('$s_name', '$s_add', '$s_info', '$s_intro', '$s_photo', '$s_pic', '$lat_lon')";
             mysqli_query($conn, $sql);
 
             
@@ -146,8 +146,8 @@ if (isset($_POST["Insert"])) {
                         <label for="inputEmail4" style="margin-top: 25px;">地址</label>
                         <input type="text" name="s_add" class="form-control" placeholder="請輸入地址">
                         <!--step2-->
-                        <label for="inputEmail4" style="margin-top: 25px;">景點地圖（Google Map）</label>
-                        <input type="text"  class="form-control" placeholder="請輸入網址">
+                        <label for="inputEmail4" style="margin-top: 25px;">景點座標</label>
+                        <input type="text" name="lat_lon" class="form-control" placeholder="請輸入網址">
 
                         <label for="inputEmail4" style="margin-top: 25px;">景點資訊</label>
                         <input type="text" name="s_info" class="form-control" placeholder="請輸入營業時間、電話等資訊">
@@ -169,7 +169,7 @@ if (isset($_POST["Insert"])) {
                             ?>
                             
                         </select>
-                        
+
                     </div> 
                     <div class="col">
                         <label for="inputEmail4">景點簡介</label>
