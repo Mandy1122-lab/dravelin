@@ -109,7 +109,6 @@ $sql = "SELECT * FROM genre";
 </head>
 
 <body class="font_set">
-    <!-- Page Preloder -->
     <div id="preloder">
         <div class="loader"></div>
     </div>
@@ -136,7 +135,7 @@ $sql = "SELECT * FROM genre";
                     echo "<tr><th>#</th><th>分類</th><th>操作</th></tr>";
 
                     while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<tr>";
+                        echo "<tr data-id='{$row['g_id']}'>";
                         echo "<td>{$row['g_id']}</td>";
                         echo "<td align='center' class='g-name'>{$row['g_name']}</td>";
                         echo "<td align='center'>
@@ -146,6 +145,7 @@ $sql = "SELECT * FROM genre";
                               </td>";
                         echo "</tr>";
                     }
+                    
 
                     echo "</table>";
                 }
@@ -222,7 +222,7 @@ editIcons.forEach(function(icon) {
         var row = icon.parentNode.parentNode;
         var nameCell = row.querySelector('.g-name');
         var originalName = nameCell.textContent.trim();
-
+        var gId = row.querySelector('td:first-child').textContent.trim(); 
 
         var nameInput = document.createElement('input');
         nameInput.setAttribute('type', 'text');
@@ -245,10 +245,11 @@ editIcons.forEach(function(icon) {
                     location.reload();
                 }
             };
-            xhr.send('g_id=' + gId + '&g_name=' + newName);
+            xhr.send('action=edit&g_id=' + gId + '&g_name=' + newName); 
         });
     });
 });
+
 
 
 // 刪除
