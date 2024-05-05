@@ -143,7 +143,7 @@
                     $m_id = $row['id'];
                     echo "<p class='s-topic bw-s-info'><b>更多<a class='drama' style='color:#1D50A1' href='movie-detail.php?m_id=" . $row['id'] . "'>&nbsp;{$row['name']}&nbsp;</a>相關景點</b></p>";
                     echo "<br>";
-                    $second_query = "SELECT spot.* FROM spot INNER JOIN spotm ON spot.s_id = spotm.s_id WHERE spotm.d_id = $d_id AND spotm.s_id != $s_id ORDER BY RAND() LIMIT 4";
+                    $second_query = "SELECT spot.* FROM spot INNER JOIN spotm ON spot.s_id = spotm.s_id WHERE spotm.m_id = $m_id AND spotm.s_id != $s_id ORDER BY RAND() LIMIT 4";
                     
 
                 }
