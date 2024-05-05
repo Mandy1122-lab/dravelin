@@ -83,10 +83,10 @@
                     echo "<p class='s-content'><b>在此取景作品</b></p>";
                     echo "<p class='s-content'><b>";
                     if (!empty($row['drama_names'])) {
-                        echo "<a href='drama-detail.php?d_id=" . $row['d_id'] . "' class='drama'>{$row['drama_names']}</a>";
+                        echo "<a  style='color:#1d50a1 !important;' href='drama-detail.php?d_id=" . $row['d_id'] . "' class='drama'>{$row['drama_names']}</a>";
                     }
                     if (!empty($row['movie_names'])) {
-                        echo "<a href='movie-detail.php?s_id=" . $row['m_id'] . "' class='movie'>{$row['movie_names']}</a>";
+                        echo "<a style='color:#1d50a1 !important;' href='movie-detail.php?m_id=" . $row['m_id'] . "' class='movie'>{$row['movie_names']}</a>";
                     }
                     echo "</b></p>";
                     echo "</div>";
@@ -97,14 +97,7 @@
                     echo "<p class='s-content'>{$row['s_intro']}</p>";
                     echo "<p class='s-topic bw-s-info'><b>相關劇照</b></p>";
                     echo "<img class='image bw-s-img' src='{$row['s_photo']}'>";
-                    echo "<p class='s-topic bw-s-info'><b>更多<a class='drama' style='color:#1D50A1' href=''>&nbsp;想見你&nbsp;</a>相關景點</b></p>
-                    <div class='s-info-wrap'>
-                        <div><img class='image' src='https://cdn2.ettoday.net/images/4724/d4724610.jpg'><a href='#'><p class='s-info-word'>小半樓</p></a></div>
-                        <div><img class='image' src='https://img.13shaniu.tw/uploads/20200511221842_72.jpeg'><a href='#'><p class='s-info-word'>龍泉冰店</p></a></div>
-                        <div><img class='image' src='https://vickylife.com/wp-content/uploads/2023/09/台南鍋燒意麵︱閒情茗品屋：在樹蔭下享受鍋燒意麵真的好愜意啊！順便回味一下電視劇想見你的場景-12.jpg'><a href'#'><p class='word'>閒情茗品屋</p></a></div>
-                        <div><img class='image' src='https://imgs.gvm.com.tw/upload/gallery/20200414/72130_01.jpg'><a href='#'><p class='s-info-word'>鳳和高中</p></a></div>
-                </div>";
-                    echo "</div>";
+                    
                 }
                 mysqli_free_result($result);
             }
@@ -112,23 +105,74 @@
             mysqli_close($conn);
             ?>
 
+            <?php 
+            include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
+            $conn = sql_open();
+            $s_id = $_GET["s_id"];
+            $sql = "
+            SELECT id, name, source
+            FROM (
+                (SELECT d_id AS id, d_name AS name, 'drama' AS source
+                FROM drama
+                WHERE d_id IN (SELECT d_id FROM spotd WHERE s_id = $s_id)
+                ORDER BY RAND())
+                UNION ALL
+                (SELECT m_id AS id, m_name AS name, 'movie' AS source
+                FROM movie
+                WHERE m_id IN (SELECT m_id FROM spotm WHERE s_id = $s_id)
+                ORDER BY RAND())
+            ) AS combined
+            ORDER BY RAND()
+            LIMIT 1;
+
+            ";
+            $result = mysqli_query($conn, $sql);
+            if ($result && $row = mysqli_fetch_assoc($result)) {
+                $source =$row['source'];
+                $s_id = $_GET["s_id"];
+
+                if($source=="drama"){
+                    $d_id = $row['id'];
+                    echo "<p class='s-topic bw-s-info'><b>更多<a class='drama' style='color:#1D50A1' href='drama-detail.php?d_id=" . $row['id'] . "'>&nbsp;{$row['name']}&nbsp;</a>相關景點</b></p>";
+                    $second_query = "SELECT spot.* FROM spot INNER JOIN spotd ON spot.s_id = spotd.s_id WHERE spotd.d_id = $d_id AND spotd.s_id != $s_id ORDER BY RAND() LIMIT 4";
+                    
+
+
+                }
+                else{ 
+                    $m_id = $row['id'];
+                    echo "<p class='s-topic bw-s-info'><b>更多<a class='drama' style='color:#1D50A1' href='movie-detail.php?m_id=" . $row['id'] . "'>&nbsp;{$row['name']}&nbsp;</a>相關景點</b></p>";
+                    echo "<br>";
+                    $second_query = "SELECT spot.* FROM spot INNER JOIN spotm ON spot.s_id = spotm.s_id WHERE spotm.d_id = $d_id AND spotm.s_id != $s_id ORDER BY RAND() LIMIT 4";
+                    
+
+                }
+                
+
+                $second_result = mysqli_query($conn, $second_query);
+
+                echo "<div class='s-info-wrap'>";
+                
+                
+                if ($second_result) {
+                    while ($second_row = mysqli_fetch_assoc($second_result)) {
+                
+                        echo "<div>";
+                        echo "<div><img class='image' src='" . $second_row['s_pic'] . "'><a href='spot-info.php?s_id=" . $second_row['s_id'] . "'><p class='s-info-word'>" . $second_row['s_name'] . "</p></a></div>";
+                        echo "</div>";
+                    }
+                    mysqli_free_result($second_result);
+                }
+                
+                echo "</div>";
+            } 
             
-            <!-- <div class="below-wrap">
-                <p class="s-topic bw-s-info"><b>景點簡介</b></p>
-                <p class="s-content">由陶藝作家方啟文老師與其學生於2014年改建台南傳統老房屋而成。小半樓不僅是想見你中的32唱片行，平常可是一間充滿許多老物的陶藝展售空間，不時會舉辦許多小展覽，也有許多愛陶之人在此泡茶聊天。</p>
-                <p class="s-topic bw-s-info"><b>相關劇照</b></p>
-                <img class="image bw-s-img" src="https://rainieis.tw/wp-content/uploads/20200330192420_62.jpg">
-                <img class="image bw-s-img" src="https://rainieis.tw/wp-content/uploads/20200330192420_14.jpg">
-                <img class="image bw-s-img" src="https://rainieis.tw/wp-content/uploads/20200330192418_46.jpg">
-                <img class="image"  src="https://rainieis.tw/wp-content/uploads/20200330192421_26.jpg">
-                <p class="s-topic bw-s-info"><b>更多<a class="drama" style="color:#1D50A1" href="">&nbsp;想見你&nbsp;</a>相關景點</b></p>
-                <div class="hot-wrap">
-                    <div><img class="image" src="https://cdn2.ettoday.net/images/4724/d4724610.jpg"><a href="#"><p class="word">小半樓</p></a></div>
-                    <div><img class="image" src="https://img.13shaniu.tw/uploads/20200511221842_72.jpeg"><a href="#"><p class="word">龍泉冰店</p></a></div>
-                    <div><img class="image" src="https://vickylife.com/wp-content/uploads/2023/09/台南鍋燒意麵︱閒情茗品屋：在樹蔭下享受鍋燒意麵真的好愜意啊！順便回味一下電視劇想見你的場景-12.jpg"><a href="#"><p class="word">閒情茗品屋</p></a></div>
-                    <div><img class="image" src="https://imgs.gvm.com.tw/upload/gallery/20200414/72130_01.jpg"><a href="#"><p class="word">鳳和高中</p></a></div>
-            </div>
-            </div> -->
+            mysqli_free_result($result);
+            mysqli_close($conn);
+
+            ?>
+            
+            
             
         </div>
     </section>
