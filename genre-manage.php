@@ -36,7 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['action']) && $_GET['acti
         echo "刪除失敗" . mysqli_error($conn);
     }
     exit();
-}
 
 
 $sql = "SELECT * FROM genre";
