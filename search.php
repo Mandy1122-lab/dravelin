@@ -185,6 +185,14 @@ body {
     <?php
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
 
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == 'edit' && isset($_POST['g_id']) && isset($_POST['g_name'])) {
+  $g_id = $_POST['g_id'];
+  $g_name = $_POST['g_name'];
+  $sql = "UPDATE genre SET g_name='$g_name' WHERE g_id='$g_id'";
+  mysqli_query($conn, $sql);
+  exit();
+}
+
 if (isset($_POST["search"])) {
     $search = $_POST["search"];
     $conn = sql_open();

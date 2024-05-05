@@ -215,56 +215,50 @@ $sql = "SELECT * FROM genre";
                 document.querySelector('.my-btn').style.display = 'none';
             });
 
-            // 編輯
+           // 編輯
             var editIcons = document.querySelectorAll('.edit-icon');
-            editIcons.forEach(function(icon) {
+                editIcons.forEach(function(icon) {
                 icon.addEventListener('click', function() {
-                    var row = icon.parentNode.parentNode;
-                    var nameCell = row.querySelector('.g-name');
-                    var nameInput = document.createElement('input');
-                    nameInput.setAttribute('type', 'text');
-                    nameInput.setAttribute('value', nameCell.textContent.trim());
-                    nameCell.textContent = '';
-                    nameCell.appendChild(nameInput);
-                    icon.classList.remove('fa-pen');
-                    icon.classList.add('fa-save');
-
-                    icon.addEventListener('click', function() {
-                        var newName = nameInput.value;
-                        var gId = row.getAttribute('data-id');
-                        var xhr = new XMLHttpRequest();
-                        xhr.open('POST', 'genre-manage.php', true);
-                        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                        xhr.onreadystatechange = function() {
-                            if (xhr.readyState == 4 && xhr.status == 200) {
-                                console.log('修改成功');
-                                location.reload();
-                            }
-                        };
-                        xhr.send('g_id=' + gId + '&g_name=' + newName);
-                    });
-                });
+            var row = icon.parentNode.parentNode;
+            var gId = row.getAttribute('data-id');
+            var newName = prompt('請輸入新的分類名稱');
+            if (newName !== null && newName.trim() !== '') {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'genre-manage.php', true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    console.log('編輯成功');
+                    location.reload();
+                }
+            };
+            xhr.send('action=edit&g_id=' + gId + '&g_name=' + newName);
+            } else {
+            alert('請輸入有效的分類名稱');
+            }
             });
+        });
 
-            // 刪除
-            var deleteIcons = document.querySelectorAll('.delete-icon');
-            deleteIcons.forEach(function(icon) {
-                icon.addEventListener('click', function() {
-                    if (confirm('是否確定刪除？')) {
-                        var row = icon.parentNode.parentNode;
-                        var gId = row.getAttribute('data-id');
-                        var xhr = new XMLHttpRequest();
-                        xhr.open('GET', 'genre-manage.php?action=delete&g_id=' + gId, true);
-                        xhr.onreadystatechange = function() {
-                            if (xhr.readyState == 4 && xhr.status == 200) {
-                                console.log('刪除成功');
-                                location.reload();
-                            }
-                        };
-                        xhr.send();
-                    }
-                });
-            });
+// 刪除
+var deleteIcons = document.querySelectorAll('.delete-icon');
+deleteIcons.forEach(function(icon) {
+    icon.addEventListener('click', function() {
+        if (confirm('是否確定刪除此分類？')) {
+            var row = icon.parentNode.parentNode;
+            var gId = row.getAttribute('data-id');
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'genre-manage.php?action=delete&g_id=' + gId, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    console.log('刪除成功');
+                    location.reload();
+                }
+            };
+            xhr.send();
+        }
+    });
+});
+
         });
     </script>
 
