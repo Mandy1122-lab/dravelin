@@ -37,8 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['genre'])) {
     $result = mysqli_query($conn, $sql);
 }
 ?>
-    
-
 
 $result = mysqli_query($conn, $sql);
 ?>
