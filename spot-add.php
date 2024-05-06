@@ -61,6 +61,7 @@ if (isset($_POST["Insert"])) {
     $s_intro = $_POST["s_intro"];
     $s_photo = $_POST["s_photo"];
     $s_pic = $_POST["s_pic"];
+    $lat_lon = $_POST["lat_lon"];
     $production_name = $_POST["production_name"];
 
     
@@ -147,7 +148,7 @@ if (isset($_POST["Insert"])) {
                         <input type="text" name="s_add" class="form-control" placeholder="請輸入地址">
                         <!--step2-->
                         <label for="inputEmail4" style="margin-top: 25px;">景點座標</label>
-                        <input type="text" name="lat_lon" class="form-control" placeholder="請輸入網址">
+                        <input type="text" name="lat_lon" class="form-control" placeholder="請輸入座標">
 
                         <label for="inputEmail4" style="margin-top: 25px;">景點資訊</label>
                         <input type="text" name="s_info" class="form-control" placeholder="請輸入營業時間、電話等資訊">
