@@ -1,26 +1,29 @@
 <?php
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
-$conn = sql_open(); 
+$conn = sql_open();
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT 'drama' AS source, d.d_id AS id, d.d_name AS name, d.d_pic AS img
+$genre = $_GET['genre'] ?? '';
+$type = $_GET['type'] ?? '';
+
+$sql = "SELECT drama AS source, d.d_id AS id, d.d_name AS name, d.d_pic AS img
         FROM drama d
         INNER JOIN genred gd ON d.d_id = gd.d_id
         INNER JOIN genre g ON gd.g_id = g.g_id
-        WHERE g.g_id = $genre AND d.type = '$type'
+        WHERE g.g_id = '$genre' AND d.type = '$type'
         UNION
-        SELECT 'movie' AS source, m.m_id AS id, m.m_name AS name, m.m_pic AS img
+        SELECT movie AS source, m.m_id AS id, m.m_name AS name, m.m_pic AS img
         FROM movie m
         INNER JOIN genrem gm ON m.m_id = gm.m_id
         INNER JOIN genre g ON gm.g_id = g.g_id
-        WHERE g.g_id = $genre AND m.type = '$type'";
+        WHERE g.g_id = '$genre' AND m.type = '$type'";
 
 $result = mysqli_query($conn, $sql);
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -272,7 +275,8 @@ body {
             <?php
             if($result && mysqli_num_rows($result) > 0) {
                 while($row = mysqli_fetch_assoc($result)) {
-                    echo '<a href="' . $row["source"] . '-detail.php?id=' . $row["id"] . '">';
+                    $id_param = $row["source"] == "drama" ? "d_id" : "m_id";
+                    echo '<a href="' . $row["source"] . '-detail.php?' . $id_param . '=' . $row["id"] . '">';
                     echo '<div class="card">';
                     echo '<img src="' . $row["img"] . '">';
                     echo '<h3>' . $row["name"] . '</h3>';
