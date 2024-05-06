@@ -9,13 +9,13 @@ if ($conn->connect_error) {
 $genre = $_GET['genre'] ?? '';
 $type = $_GET['type'] ?? '';
 
-$sql = "SELECT drama AS source, d.d_id AS id, d.d_name AS name, d.d_pic AS img
+$sql = "SELECT 'drama' AS source, d.d_id AS id, d.d_name AS name, d.d_pic AS img
         FROM drama d
         INNER JOIN genred gd ON d.d_id = gd.d_id
         INNER JOIN genre g ON gd.g_id = g.g_id
         WHERE g.g_id = '$genre' AND d.type = '$type'
         UNION
-        SELECT movie AS source, m.m_id AS id, m.m_name AS name, m.m_pic AS img
+        SELECT 'movie' AS source, m.m_id AS id, m.m_name AS name, m.m_pic AS img
         FROM movie m
         INNER JOIN genrem gm ON m.m_id = gm.m_id
         INNER JOIN genre g ON gm.g_id = g.g_id
@@ -301,34 +301,34 @@ body {
             });
         });
 
-        function fetchSearchResults(selectedGenre, selectedType) {
-    let searchResultsContainer = document.getElementById("searchResults");
-    searchResultsContainer.innerHTML = "<div class='card'><h3 style='color: white; font-size: 20px; font-weight: bold;'>搜尋中...</h3></div>";
+        function fetchSearchResults(selectedGenres, selectedType) {
+            let searchResultsContainer = document.getElementById("searchResults");
+            searchResultsContainer.innerHTML = "<div class='card'><h3 style='color: white; font-size: 20px; font-weight: bold;'>搜尋中...</h3></div>";
 
-    fetch('fetch_results.php?genre=' + encodeURIComponent(selectedGenre) + '&type=' + encodeURIComponent(selectedType))
-        .then(response => response.json())
-        .then(data => {
-            if (data.length > 0) {
-                let resultsHtml = '';
-                data.forEach(result => {
-                resultsHtml += `<a href="${result.source}-detail.php?id=${result.id}">
-                        <div class="card">
-                            <img src="${result.img}">
-                            <h3>${result.name}</h3>
-                        </div>
-                    </a>`;
-});
+            fetch('fetch_results.php?genre=' + encodeURIComponent(selectedGenres.join(',')) + '&type=' + encodeURIComponent(selectedType))
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        let resultsHtml = '';
+                        data.forEach(result => {
+                            resultsHtml += `<a href="${result.source}-detail.php?id=${result.id}">
+                                <div class="card">
+                                    <img src="${result.img}">
+                                    <h3>${result.name}</h3>
+                                </div>
+                            </a>`;
+                        });
 
-                searchResultsContainer.innerHTML = resultsHtml;
-            } else {
-                searchResultsContainer.innerHTML = "<div class='card'><h3 style='color: white; font-size: 20px; font-weight: bold;'>沒有搜尋結果</h3></div>";
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching search results:', error);
-            searchResultsContainer.innerHTML = "<div class='card'><h3 style='color: white; font-size: 20px; font-weight: bold;'>搜尋錯誤</h3></div>";
-        });
-}
+                        searchResultsContainer.innerHTML = resultsHtml;
+                    } else {
+                        searchResultsContainer.innerHTML = "<div class='card'><h3 style='color: white; font-size: 20px; font-weight: bold;'>沒有搜尋結果</h3></div>";
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching search results:', error);
+                    searchResultsContainer.innerHTML = "<div class='card'><h3 style='color: white; font-size: 20px; font-weight: bold;'>搜尋錯誤</h3></div>";
+                });
+        }
     </script>
 </body>
 </html>
