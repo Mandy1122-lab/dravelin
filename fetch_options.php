@@ -1,24 +1,21 @@
 <?php
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
-$conn = sql_open();
+$conn = sql_open(); 
 
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    if (isset($_GET['sql'])) {
+        $sql = $_GET['sql'];
 
-$options = [];
+        $result = mysqli_query($conn, $sql);
 
-$options[] = '全部';
+        $response = array();
+        while ($row = mysqli_fetch_assoc($result)) {
+            $response[] = $row;
+        }
 
-$sql = "SELECT g_name FROM genre";
-$result = $conn->query($sql);
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $options[] = $row['g_name'];
+        echo json_encode($response);
+    } else {
+        echo "Invalid SQL query";
     }
 }
-
-echo json_encode($options);
-
-mysqli_close($conn);
 ?>
