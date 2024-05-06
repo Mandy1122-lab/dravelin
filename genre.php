@@ -196,7 +196,7 @@ $sql = "SELECT * FROM genre";
                     var gName = nameInput.value;
                     if (gName.trim() !== '') {
                         var xhr = new XMLHttpRequest();
-                        xhr.open('POST', 'genre_manage.php', true);
+                        xhr.open('POST', 'genre-manage.php', true);
                         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                         xhr.onreadystatechange = function() {
                             if (xhr.readyState == 4 && xhr.status == 200) {
@@ -237,7 +237,7 @@ editIcons.forEach(function(icon) {
             var newName = nameInput.value;
             var gId = row.getAttribute('data-id');
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'genre_manage.php', true);
+            xhr.open('POST', 'genre-manage.php', true);
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4 && xhr.status == 200) {
@@ -260,7 +260,7 @@ deleteIcons.forEach(function(icon) {
             var row = icon.parentNode.parentNode;
             var gId = row.getAttribute('data-id');
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'genre_manage.php?action=delete&g_id=' + gId, true);
+            xhr.open('GET', 'genre-manage.php?action=delete&g_id=' + gId, true);
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     console.log('刪除成功');

@@ -33,7 +33,8 @@ body {
   margin-top: 50px;
   max-width: 1200px;
   margin:  auto;
-  padding: 0 20px;
+  padding: 0 0px;
+  min-height: 100vh;
 }
 .search-bar {
   margin-bottom: 20px;
