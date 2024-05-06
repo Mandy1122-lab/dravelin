@@ -1,25 +1,44 @@
 <?php
-include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
-$conn = sql_open();
+    include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
+    $conn = sql_open();
+    
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    
+    $genre = $_GET['genre'] ?? '';
+    
+    if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['genre'])) {
+        $genre = mysqli_real_escape_string($conn, $_GET['genre']);
+    
+        $sql = "SELECT 'drama' AS source, d.d_id AS id, d.d_name AS name, d.d_pic AS img
+                FROM drama d
+                INNER JOIN genred gd ON d.d_id = gd.d_id
+                INNER JOIN genre g ON gd.g_id = g.g_id
+                WHERE g.g_id = '$genre'";
+    
+        $sql .= " UNION
+                SELECT 'movie' AS source, m.m_id AS id, m.m_name AS name, m.m_pic AS img
+                FROM movie m
+                INNER JOIN genrem gm ON m.m_id = gm.m_id
+                INNER JOIN genre g ON gm.g_id = g.g_id
+                WHERE g.g_id = '$genre'";
+    
+        $result = mysqli_query($conn, $sql);
+    
+        $response = array();
+        while ($row = mysqli_fetch_assoc($result)) {
+            $response[] = $row;
+        }
+    
+        echo json_encode($response);
+    } else {
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+        echo json_encode(array());
+    }
+?>
+    
 
-$genre = $_GET['genre'] ?? '';
-$type = $_GET['type'] ?? '';
-
-$sql = "SELECT 'drama' AS source, d.d_id AS id, d.d_name AS name, d.d_pic AS img
-        FROM drama d
-        INNER JOIN genred gd ON d.d_id = gd.d_id
-        INNER JOIN genre g ON gd.g_id = g.g_id
-        WHERE g.g_id = '$genre' AND d.type = '$type'
-        UNION
-        SELECT 'movie' AS source, m.m_id AS id, m.m_name AS name, m.m_pic AS img
-        FROM movie m
-        INNER JOIN genrem gm ON m.m_id = gm.m_id
-        INNER JOIN genre g ON gm.g_id = g.g_id
-        WHERE g.g_id = '$genre' AND m.type = '$type'";
 
 $result = mysqli_query($conn, $sql);
 ?>
@@ -88,6 +107,9 @@ body {
   height: 320px;
   object-fit: cover;
   border-radius: 2px;
+  align: center;
+  display: block;
+  margin: 0 auto; 
 }
 .card h3 {
   margin-top: 10px;
@@ -97,6 +119,8 @@ body {
   overflow: hidden;
   text-overflow: ellipsis; 
   max-width: 100%;
+  color: black;
+  text-decoration: none;
 
 }
 .back-icon {
@@ -224,9 +248,14 @@ body {
 
     .options input[type="checkbox"]:checked+label {
         background-color:#fed566;
-        color: #1d50a1;
+        color: #fed566;
         border: 1px solid white;
     }
+    .options label.selected {
+    background-color: #fed566;
+    color: #1d50a1;
+    border: 1px solid white;
+}
 
     .title {
         color: white;
@@ -293,42 +322,72 @@ body {
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById("searchButton").addEventListener("click", function(event) {
-                const selectedGenres = Array.from(document.querySelectorAll('input[name="genre"]:checked')).map(el => el.value);
-                const selectedType = document.querySelector('input[name="type"]:checked').value;
+    document.getElementById("searchButton").addEventListener("click", function(event) {
+        const selectedGenres = Array.from(document.querySelectorAll('input[name="genre"]:checked')).map(el => el.value);
+        const selectedType = document.querySelector('input[name="type"]:checked').value;
 
-                fetchSearchResults(selectedGenres, selectedType);
-            });
+        fetchSearchResults(selectedGenres, selectedType);
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const genreOptions = document.querySelectorAll('#genreOptions input[type="checkbox"]');
+
+    genreOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            if (this.checked) {
+                this.parentNode.classList.add('selected');
+            } else {
+                this.parentNode.classList.remove('selected');
+            }
         });
+    });
+});
 
-        function fetchSearchResults(selectedGenres, selectedType) {
-            let searchResultsContainer = document.getElementById("searchResults");
-            searchResultsContainer.innerHTML = "<div class='card'><h3 style='color: white; font-size: 20px; font-weight: bold;'>搜尋中...</h3></div>";
+document.addEventListener('DOMContentLoaded', function () {
+    const typeOptions = document.querySelectorAll('#typeOptions input[type="checkbox"]');
 
-            fetch('fetch_results.php?genre=' + encodeURIComponent(selectedGenres.join(',')) + '&type=' + encodeURIComponent(selectedType))
-                .then(response => response.json())
-                .then(data => {
-                    if (data.length > 0) {
-                        let resultsHtml = '';
-                        data.forEach(result => {
-                            resultsHtml += `<a href="${result.source}-detail.php?id=${result.id}">
-                                <div class="card">
-                                    <img src="${result.img}">
-                                    <h3>${result.name}</h3>
-                                </div>
-                            </a>`;
-                        });
+    typeOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            if (this.checked) {
+                this.parentNode.classList.add('selected');
+            } else {
+                this.parentNode.classList.remove('selected');
+            }
+        });
+    });
+});
 
-                        searchResultsContainer.innerHTML = resultsHtml;
-                    } else {
-                        searchResultsContainer.innerHTML = "<div class='card'><h3 style='color: white; font-size: 20px; font-weight: bold;'>沒有搜尋結果</h3></div>";
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching search results:', error);
-                    searchResultsContainer.innerHTML = "<div class='card'><h3 style='color: white; font-size: 20px; font-weight: bold;'>搜尋錯誤</h3></div>";
+
+function fetchSearchResults(selectedGenres, selectedType) {
+    let searchResultsContainer = document.getElementById("searchResults");
+    searchResultsContainer.innerHTML = "<div class='card'><h3 style='color: white; font-size: 20px; font-weight: bold;'>搜尋中...</h3></div>";
+
+    fetch('fetch_result.php?genre=' + encodeURIComponent(selectedGenres.join(',')) + '&type=' + encodeURIComponent(selectedType))
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                let resultsHtml = '';
+                data.forEach(result => {
+                    resultsHtml += `<a href="${result.source}-detail.php?id=${result.id}">
+                        <div class="card">
+                            <img src="${result.img}">
+                            <h3>${result.name}</h3>
+                        </div>
+                    </a>`;
                 });
-        }
+
+                searchResultsContainer.innerHTML = resultsHtml;
+            } else {
+                searchResultsContainer.innerHTML = "<div class='card'><h3 style='color: white; font-size: 20px; font-weight: bold;'>沒有搜尋結果</h3></div>";
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching search results:', error);
+            searchResultsContainer.innerHTML = "<div class='card'><h3 style='color: white; font-size: 20px; font-weight: bold;'>搜尋錯誤</h3></div>";
+        });
+}
+
     </script>
 </body>
 </html>
