@@ -62,6 +62,7 @@ if (isset($_POST["Insert"])) {
     $s_photo = $_POST["s_photo"];
     $s_pic = $_POST["s_pic"];
     $lat_lon = $_POST["lat_lon"];
+    $c_id = $_POST["c_id"];
     $production_name = $_POST["production_name"];
 
     
@@ -81,6 +82,10 @@ if (isset($_POST["Insert"])) {
 
         
         $sql = "INSERT INTO spotm (s_id, m_id) VALUES ('$s_id', '$production_id')";
+        mysqli_query($conn, $sql);
+
+        $sql = "INSERT INTO cspot (c_id, s_id) VALUES ('$c_id', '$s_id')";
+
 
         
         if (mysqli_query($conn, $sql)) {
@@ -104,13 +109,14 @@ if (isset($_POST["Insert"])) {
             $sql = "INSERT INTO spot (s_name, s_add, s_info, s_intro, s_photo, s_pic, lat_lon) VALUES ('$s_name', '$s_add', '$s_info', '$s_intro', '$s_photo', '$s_pic', '$lat_lon')";
             mysqli_query($conn, $sql);
 
-            
             $s_id = mysqli_insert_id($conn);
 
             
             $sql = "INSERT INTO spotd (s_id, d_id) VALUES ('$s_id', '$production_id')";
+            mysqli_query($conn, $sql);
 
-            
+            $sql = "INSERT INTO cspot (c_id, s_id) VALUES ('$c_id', '$s_id')";
+
             if (mysqli_query($conn, $sql)) {
                 mysqli_close($conn);
                 echo '<script>window.location.href = "spot-manage.php";</script>';
@@ -153,6 +159,7 @@ if (isset($_POST["Insert"])) {
                         <label for="inputEmail4" style="margin-top: 25px;">景點資訊</label>
                         <input type="text" name="s_info" class="form-control" placeholder="請輸入營業時間、電話等資訊">
                         <!--step2-->
+                        
                         <label for="inputEmail4" style="margin-top: 25px;">在此取景作品</label><br>
                         <select class="form-control select" id="exampleFormControlSelect1" name="production_name">
                         <?php 
@@ -172,7 +179,7 @@ if (isset($_POST["Insert"])) {
                         </select>
 
                     </div> 
-                    <div class="col">
+                    <div class="col"> 
                         <label for="inputEmail4">景點簡介</label>
                         <textarea class="form-control" name="s_intro" placeholder="請輸入內容" rows="5"></textarea>
 
@@ -181,6 +188,23 @@ if (isset($_POST["Insert"])) {
 
                         <label for="inputEmail4" style="margin-top: 25px;">景點封面圖</label>
                         <input type="text" name="s_pic" class="form-control" placeholder="請輸入位置">
+                        <div style="display:grid;grid-template-rows:1fr 2fr;margin-top:25px">
+                        <label for="inputEmail4" >國家</label>
+                        <select class="form-control select"  id="country" name="c_id">
+                        <?php 
+                            include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
+                            $conn = sql_open();
+                            $sql = "SELECT c_id, c_name FROM country";
+                            if ($result = mysqli_query($conn, $sql)) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo "<option value='" . $row['c_id'] . "'>" . $row['c_name'] . "</option>";
+                                    
+                                }
+                                mysqli_free_result($result);
+                            }
+                            mysqli_close($conn);
+                            ?>
+                        </select></div>
                         <nobr>
                         <button type="reset" onclick="window.location.href='spot-manage.php'" class="btn btn-outline-primary cancel" >取消</button>
                         <button type="submit" name="Insert" class="btn btn-outline-primary save">儲存</button>
@@ -231,16 +255,7 @@ if (isset($_POST["Insert"])) {
 </footer>
 <!-- Footer Section End -->
 
-<!-- Search model Begin -->
-<div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch"><i class="icon_close"></i></div>
-        <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Search here.....">
-        </form>
-    </div>
-</div>
-<!-- Search model end -->
+
 
 <!-- Js Plugins -->
 <script src="js/jquery-3.3.1.min.js"></script>
