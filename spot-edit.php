@@ -53,7 +53,13 @@
         $conn = sql_open();
         $s_id = $_GET["s_id"];
 
-        $sql = "SELECT * FROM spot WHERE s_id ='$s_id'";
+        $sql = "SELECT spot.*, cspot.c_id, country.c_name 
+        FROM spot 
+        INNER JOIN cspot ON spot.s_id = cspot.s_id 
+        INNER JOIN country ON cspot.c_id = country.c_id 
+        WHERE spot.s_id = '$s_id';
+        ";
+
         $result = mysqli_query($conn,$sql);
         if ($row = mysqli_fetch_assoc($result)){
         $existingData = [
@@ -64,6 +70,8 @@
             's_intro' => $row['s_intro'],
             's_photo' => $row['s_photo'],
             's_pic' => $row['s_pic'],
+            
+            'c_id' => $row['c_id']
 
         ];
         }else{
@@ -87,8 +95,12 @@
         $s_info = $_POST["s_info"];
         $s_photo = $_POST["s_photo"];
         $s_pic = $_POST["s_pic"];
+        $c_id = $_POST["c_id"];
+        
 
         $sql = "UPDATE spot SET s_name = '$s_name', s_add = '$s_add', s_intro = '$s_intro', s_info = '$s_info', s_photo = '$s_photo', s_pic = '$s_pic', lat_lon = '$lat_lon' WHERE s_id='$s_id' ";
+        mysqli_query($conn, $sql);
+        $sql = "UPDATE cspot SET c_id = '$c_id' WHERE s_id='$s_id'";
 
         if (mysqli_query($conn, $sql)) {
             mysqli_close($conn);
@@ -138,12 +150,10 @@
 
                         <label for="inputEmail4" style="margin-top: 25px;">在此取景作品</label><br>
                         <select class="form-control select" id="exampleFormControlSelect1" >
-                            <option>想見你</option>
-                            <option>華燈初上</option>
-                            <option>比悲傷更悲傷的故事</option>
-                            <option>等一個人的咖啡</option>
+                        
                             
-                            </select>
+                            
+                        </select>
                         
                     </div>
                     <div class="col">
@@ -156,6 +166,27 @@
 
                         <label for="inputEmail4" style="margin-top: 25px;">景點封面圖</label>
                         <input type="text" name="s_pic" class="form-control" placeholder="請輸入位置" value="<?php echo $existingData['s_pic'];?>">
+                        <div style="display:grid;grid-template-rows:1fr 2fr;margin-top:25px">
+                        <label for="inputEmail4" >國家</label>
+                        <select class="form-control select" id="country" name="c_id">
+                        <?php 
+                            include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
+                            $conn = sql_open();
+                            $sql = "SELECT c_id, c_name FROM country";
+                            if ($result = mysqli_query($conn, $sql)) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    $selected = ($row['c_id'] == $existingData['c_id']) ? 'selected' : ''; 
+                                    echo "<option value='" . $row['c_id'] . "' $selected>" . $row['c_name'] . "</option>";
+                                }
+                                mysqli_free_result($result);
+                            }
+                            mysqli_close($conn);
+                        ?>
+                        
+                    </select>
+
+                    </select>
+                    </div>
                         <nobr>
                         <button type="reset" class="btn btn-outline-primary cancel" onclick="window.location.href='spot-manage.php'">取消</button>
                         <button type="submit" name="Update" onclick="return confirmaction()" class="btn btn-outline-primary save">儲存</button>
