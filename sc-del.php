@@ -10,7 +10,7 @@
 
         if (mysqli_query($conn, $sql)) {
             mysqli_close($conn);
-            echo '<script>window.location.href = "spotcoll.php?sc_id=$scid";</script>';
+            header("Location: spotcoll.php?sc_id=$scid"); 
             exit();
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($link);
