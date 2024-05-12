@@ -431,6 +431,7 @@ if (isset($_POST["Update"])) {
                         </form>
 
                             <?php
+                            $s_id = $_GET['s_id'];
                             if (isset($_POST["Search"])) {
                                 $s_id = $_GET['s_id'];
                                 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
