@@ -398,7 +398,7 @@ if (isset($_POST["Update"])) {
                                             echo "<tr>";
                                             echo "<td>{$row['m_id']}</td>";
                                             echo "<td>{$row['m_name']}</td>";
-                                            echo "<td><a href='spotm-del.php?sm_id=" . $row['sm_id'] . "' onclick='return confirmaction()'><i class='fa-solid fa-trash trash'></i></a></td>";
+                                            echo "<td><a href='spotm-del.php??s_id=" . $row['s_id']  . "&sm_id=" . $sm_id . "' onclick='return confirmaction()'><i class='fa-solid fa-trash trash'></i></a></td>";
                                             echo "</tr>";
                                         }
                                         
@@ -533,7 +533,7 @@ if (isset($_POST["Update"])) {
                                             echo "<tr>";
                                             echo "<td>{$row['d_id']}</td>";
                                             echo "<td>{$row['d_name']}</td>";
-                                            echo "<td><a href='spotd-del.php?sd_id=" . $row['sd_id'] . "' onclick='return confirmaction()'><i class='fa-solid fa-trash trash'></i></a></td>";
+                                            echo "<td><a href='spotd-del.php?s_id=" . $row['s_id']  . "&sd_id=" . $sd_id . "' onclick='return confirmaction()'><i class='fa-solid fa-trash trash'></i></a></td>";
                                             echo "</tr>";
                                         }
                                         
