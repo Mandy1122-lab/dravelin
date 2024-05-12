@@ -131,60 +131,36 @@
             include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
             $conn = sql_open();
             $s_id = $_GET["s_id"];
-            $sql = "
-            SELECT id, name, source
-            FROM (
-                (SELECT d_id AS id, d_name AS name, 'drama' AS source
-                FROM drama
-                WHERE d_id IN (SELECT d_id FROM spotd WHERE s_id = $s_id)
-                ORDER BY RAND())
-                UNION ALL
-                (SELECT m_id AS id, m_name AS name, 'movie' AS source
-                FROM movie
-                WHERE m_id IN (SELECT m_id FROM spotm WHERE s_id = $s_id)
-                ORDER BY RAND())
-            ) AS combined
-            ORDER BY RAND()
-            LIMIT 1;
-
+            $sql = "SELECT s.s_id, s.s_name, s.s_pic
+            FROM spot s
+            WHERE s.s_id IN (
+                SELECT DISTINCT s_id
+                FROM (
+                    SELECT s_id FROM spotd WHERE d_id IN (SELECT d_id FROM spotd WHERE s_id = $s_id)
+                    UNION ALL
+                    SELECT s_id FROM spotm WHERE m_id IN (SELECT m_id FROM spotm WHERE s_id = $s_id)
+                ) AS temp
+                WHERE s_id != $s_id
+            )
+            LIMIT 4;
             ";
             $result = mysqli_query($conn, $sql);
-            if ($result && $row = mysqli_fetch_assoc($result)) {
-                $source =$row['source'];
-                $s_id = $_GET["s_id"];
-
-                if($source=="drama"){
-                    $d_id = $row['id'];
-                    echo "<p class='s-topic bw-s-info'><b>更多<a class='drama' style='color:#1D50A1' href='drama-detail.php?d_id=" . $row['id'] . "'>&nbsp;{$row['name']}&nbsp;</a>相關景點</b></p>";
-                    $second_query = "SELECT spot.* FROM spot INNER JOIN spotd ON spot.s_id = spotd.s_id WHERE spotd.d_id = $d_id AND spotd.s_id != $s_id ORDER BY RAND() LIMIT 4";
-                    
-
-
-                }
-                else{ 
-                    $m_id = $row['id'];
-                    echo "<p class='s-topic bw-s-info'><b>更多<a class='drama' style='color:#1D50A1' href='movie-detail.php?m_id=" . $row['id'] . "'>&nbsp;{$row['name']}&nbsp;</a>相關景點</b></p>";
-                    echo "<br>";
-                    $second_query = "SELECT spot.* FROM spot INNER JOIN spotm ON spot.s_id = spotm.s_id WHERE spotm.m_id = $m_id AND spotm.s_id != $s_id ORDER BY RAND() LIMIT 4";
-                    
-
-                }
+            if ($result ) {
+                echo "<p class='s-topic bw-s-info'><b>更多相關景點</b></p>";
                 
-
-                $second_result = mysqli_query($conn, $second_query);
 
                 echo "<div class='s-info-wrap'>";
                 
                 
-                if ($second_result) {
-                    while ($second_row = mysqli_fetch_assoc($second_result)) {
+                
+                    while ($row = mysqli_fetch_assoc($result)) {
                 
                         echo "<div>";
-                        echo "<div><img class='image' src='" . $second_row['s_pic'] . "'><a href='spot-info.php?s_id=" . $second_row['s_id'] . "'><p class='s-info-word'>" . $second_row['s_name'] . "</p></a></div>";
+                        echo "<div><img class='image' src='" . $row['s_pic'] . "'><a href='spot-info.php?s_id=" . $row['s_id'] . "'><p class='s-info-word'>" . $row['s_name'] . "</p></a></div>";
                         echo "</div>";
                     }
-                    mysqli_free_result($second_result);
-                }
+                    mysqli_free_result($result);
+                
                 
                 echo "</div>";
             } 
