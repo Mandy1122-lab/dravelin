@@ -27,6 +27,12 @@
     <!--font-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
     <script src="https://kit.fontawesome.com/937e93c93c.js" crossorigin="anonymous"></script>
+    <style>
+        iframe{
+            width:350px;height:200px
+        }
+    
+    </style>
     
 </head>
 
@@ -103,9 +109,17 @@
                     echo "<div class='below-wrap'>";
                     echo "<p class='s-topic bw-s-info'><b>景點簡介</b></p>";
                     echo "<p class='s-content'>{$row['s_intro']}</p>";
+                    echo "<div style='display: grid;grid-template-columns: 1fr 1fr'>";
+                    
+                    echo "<div>";
                     echo "<p class='s-topic bw-s-info'><b>相關劇照</b></p>";
                     echo "<img class='image bw-s-img' src='{$row['s_photo']}'>";
-                    
+                    echo "</div>";
+                    echo "<div>";
+                    echo "<p class='s-topic bw-s-info'><b>Google Map</b></p>";
+                    echo $row["frame"];
+                    echo "</div>";
+                    echo "</div>";
                 }
                 mysqli_free_result($result);
             }
