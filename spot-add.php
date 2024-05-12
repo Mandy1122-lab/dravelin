@@ -83,8 +83,7 @@ if (isset($_POST["Insert"])) {
 
         if (mysqli_query($conn, $sql)) {
             mysqli_close($conn);
-            echo '<script>window.location.href = "spot-edit.php?' . $s_id . '";</script>';
-
+            header("Location: spot-edit.php?s_id=$s_id"); 
             exit(); 
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);
