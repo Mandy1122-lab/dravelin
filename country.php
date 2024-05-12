@@ -132,7 +132,7 @@ if ($result = mysqli_query($conn, $sql)) {
         
         
         echo "<div style='display:grid;grid-template-columns:2fr 5fr 1fr;grid-gap:30px;margin:auto auto auto 30px;padding-top:30px;width:100%;border-top:1px solid;'>";
-        echo "<div><img style='width: 250px !important;height:170px;border-radius: 20px;' src='{$row['s_pic']}'></div>";
+        echo "<div><img style='width: 250px !important;height:170px;border-radius: 20px;margin-bottom:30px' src='{$row['s_pic']}'></div>";
         echo "<div>";
         echo "<p class='s-title'><b>{$row['s_name']}</b></p>";
         echo "<div class='s-wrap'>";
@@ -141,18 +141,24 @@ if ($result = mysqli_query($conn, $sql)) {
         echo "<p class='s-content'><b>景點資訊</b></p>";
         echo "<p class='s-content'>{$row['s_info']}</p>";
         echo "<p class='s-content'><b>在此取景作品</b></p>";
+        echo "<p class='s-content'><b>";
+
+$links = array();
+
+if (!empty($row['movie_names'])) {
+    $links[] = "<a href='movie-detail.php?m_id=" . $row['m_id'] . "' class='s-content drama'><b>{$row['movie_names']}</b></a>";
+}
+
+if (!empty($row['drama_names'])) {
+    $links[] = "<a href='drama-detail.php?d_id=" . $row['d_id'] . "' class='s-content drama'><b>{$row['drama_names']}</b></a>";
+}
+
+echo implode("、", $links);
 
         
-        if (!empty($row['movie_names'])) {
-            echo "<a href='movie-detail.php?m_id=" . $row['m_id'] . "'><p class='s-content drama'><b>{$row['movie_names']}</b></p></a>";
-        }
-        
-        if (!empty($row['drama_names'])) {
-            echo "<a href='drama-detail.php?d_id=" . $row['d_id'] . "'><p class='s-content drama'><b>{$row['drama_names']}</b></p></a>";
-        }
-        
         
 
+        echo "</b></p>";
         echo "</div>";
         echo "</div>";
         echo "<div style='position: relative;'><a style='font-size:20px;position:absolute;bottom:12px' href='spot-info.php?s_id=" . $row['s_id'] . "'><i class='fa-solid fa-circle-info' style='color: #1d50a1;'>&nbsp;&nbsp;詳細資訊</i></a></div>";
@@ -177,9 +183,11 @@ mysqli_close($conn);
 
 <!-- Footer Section Begin -->
 <?php 
-    include 'footer.html';
+    include "footer.html";
 ?>
+
 <!-- Footer Section End -->
+
 
 
 <!-- Js Plugins -->
