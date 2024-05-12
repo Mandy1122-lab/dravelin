@@ -27,6 +27,15 @@
     <!--font-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
     <script src="https://kit.fontawesome.com/937e93c93c.js" crossorigin="anonymous"></script>
+    <style>
+        .nav-item a{
+            color:black !important;
+            background-color:#EEEEEE;
+        }
+        .tab-content{
+            margin:30px auto 30px auto;
+        }
+    </style>
     
 
     
@@ -63,31 +72,15 @@ if (isset($_POST["Insert"])) {
     $s_pic = $_POST["s_pic"];
     $lat_lon = $_POST["lat_lon"];
     $c_id = $_POST["c_id"];
-    $production_name = $_POST["production_name"];
-
     
-    $sql = "SELECT m_id FROM movie WHERE m_name = '$production_name'";
-    $result = mysqli_query($conn, $sql);
-    if (mysqli_num_rows($result) > 0) {
-        
-        $row = mysqli_fetch_assoc($result);
-        $production_id = $row['m_id'];
 
-        
-        $sql = "INSERT INTO spot (s_name, s_add, s_info, s_intro, s_photo, s_pic, lat_lon) VALUES ('$s_name', '$s_add', '$s_info', '$s_intro', '$s_photo', '$s_pic', '$lat_lon')";
+    $sql = "INSERT INTO spot (s_name, s_add, s_info, s_intro, s_photo, s_pic, lat_lon) VALUES ('$s_name', '$s_add', '$s_info', '$s_intro', '$s_photo', '$s_pic', '$lat_lon')";
         mysqli_query($conn, $sql);
 
-        
         $s_id = mysqli_insert_id($conn);
-
-        
-        $sql = "INSERT INTO spotm (s_id, m_id) VALUES ('$s_id', '$production_id')";
-        mysqli_query($conn, $sql);
 
         $sql = "INSERT INTO cspot (c_id, s_id) VALUES ('$c_id', '$s_id')";
 
-
-        
         if (mysqli_query($conn, $sql)) {
             mysqli_close($conn);
             echo '<script>window.location.href = "spot-manage.php";</script>';
@@ -96,39 +89,10 @@ if (isset($_POST["Insert"])) {
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
-    } else {
-        
-        $sql = "SELECT d_id FROM drama WHERE d_name = '$production_name'";
-        $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
-            
-            $row = mysqli_fetch_assoc($result);
-            $production_id = $row['d_id'];
+    } 
+    
 
-            
-            $sql = "INSERT INTO spot (s_name, s_add, s_info, s_intro, s_photo, s_pic, lat_lon) VALUES ('$s_name', '$s_add', '$s_info', '$s_intro', '$s_photo', '$s_pic', '$lat_lon')";
-            mysqli_query($conn, $sql);
 
-            $s_id = mysqli_insert_id($conn);
-
-            
-            $sql = "INSERT INTO spotd (s_id, d_id) VALUES ('$s_id', '$production_id')";
-            mysqli_query($conn, $sql);
-
-            $sql = "INSERT INTO cspot (c_id, s_id) VALUES ('$c_id', '$s_id')";
-
-            if (mysqli_query($conn, $sql)) {
-                mysqli_close($conn);
-                echo '<script>window.location.href = "spot-manage.php";</script>';
-                exit();
-            }
-        } else {
-            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-
-        }
-    }
-
-}
 ?>
 
 
@@ -138,11 +102,18 @@ if (isset($_POST["Insert"])) {
     <section class="product-page spad">
         <div class="container"> 
             <div>
-                <div class="section_title line" style='margin-top:-30px'>
-                    
+                <div class="section_title" style='margin-top:-30px'>
                     <h4>新增 - 景點介紹</h4>
-                    
-                    
+                </div>
+                <div style="margin-left:30px !important">
+                <ul class="nav nav-tabs" id="myTab">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#a">介紹</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="a">
+                    </div>
                 </div>
                 <form action="spot-add.php" method="post">
                     <div class="row">
@@ -159,38 +130,9 @@ if (isset($_POST["Insert"])) {
                         <label for="inputEmail4" style="margin-top: 25px;">景點資訊</label>
                         <input type="text" name="s_info" class="form-control" placeholder="請輸入營業時間、電話等資訊">
                         <!--step2-->
-                        
-                        <label for="inputEmail4" style="margin-top: 25px;">在此取景作品</label><br>
-                        <select class="form-control select" id="exampleFormControlSelect1" name="production_name">
-                        <?php 
-                            include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
-                            $conn = sql_open();
-                            $sql = "SELECT d_name AS production_name FROM drama UNION SELECT m_name AS production_name FROM movie";
-                            if ($result = mysqli_query($conn, $sql)) {
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo "<option value='" . $row['production_name'] . "'>" . $row['production_name'] . "</option>";
-                                    
-                                }
-                                mysqli_free_result($result);
-                            }
-                            mysqli_close($conn);
-                            ?>
-                            
-                        </select>
-
-                    </div> 
-                    <div class="col"> 
-                        <label for="inputEmail4">景點簡介</label>
-                        <textarea class="form-control" name="s_intro" placeholder="請輸入內容" rows="5"></textarea>
-
-                        <label for="inputEmail4" style="margin-top: 25px;">相關劇照</label>
-                        <input type="text" name="s_photo" class="form-control" placeholder="請輸入位置">
-
-                        <label for="inputEmail4" style="margin-top: 25px;">景點封面圖</label>
-                        <input type="text" name="s_pic" class="form-control" placeholder="請輸入位置">
                         <div style="display:grid;grid-template-rows:1fr 2fr;margin-top:25px">
                         <label for="inputEmail4" >國家</label>
-                        <select class="form-control select"  id="country" name="c_id">
+                        <select class="form-control select"  id="country" name="c_id" >
                         <?php 
                             include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
                             $conn = sql_open();
@@ -205,6 +147,20 @@ if (isset($_POST["Insert"])) {
                             mysqli_close($conn);
                             ?>
                         </select></div>
+                        
+                        
+
+                    </div> 
+                    <div class="col"> 
+                        <label for="inputEmail4">景點簡介</label>
+                        <textarea class="form-control" name="s_intro" placeholder="請輸入內容" rows="5"></textarea>
+
+                        <label for="inputEmail4" style="margin-top: 25px;">相關劇照</label>
+                        <input type="text" name="s_photo" class="form-control" placeholder="請輸入位置">
+
+                        <label for="inputEmail4" style="margin-top: 25px;">景點封面圖</label>
+                        <input type="text" name="s_pic" class="form-control" placeholder="請輸入位置">
+                        
                         <nobr>
                         <button type="reset" onclick="window.location.href='spot-manage.php'" class="btn btn-outline-primary cancel" >取消</button>
                         <button type="submit" name="Insert" class="btn btn-outline-primary save">儲存</button>
@@ -214,6 +170,7 @@ if (isset($_POST["Insert"])) {
                     
                     </div>
                 </form>
+                </div>
     
                 
             </div>
@@ -222,7 +179,49 @@ if (isset($_POST["Insert"])) {
     </section>
 <!-- Product Section End -->
 
+<!-- Footer Section Begin -->
+<footer class="footer">
+    <div class="page-up">
+        <a href="#" id="scrollToTopButton"><span class="arrow_carrot-up"></span></a>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="footer__logo">
+                    <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="footer__nav">
+                    <ul>
+                        <li class="active"><a href="./index.html">Homepage</a></li>
+                        <li><a href="./categories.html">Categories</a></li>
+                        <li><a href="./blog.html">Our Blog</a></li>
+                        <li><a href="#">Contacts</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
 
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Footer Section End -->
+
+<!-- Search model Begin -->
+<div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch"><i class="icon_close"></i></div>
+        <form class="search-model-form">
+            <input type="text" id="search-input" placeholder="Search here.....">
+        </form>
+    </div>
+</div>
+<!-- Search model end -->
 
 <!-- Js Plugins -->
 <script src="js/jquery-3.3.1.min.js"></script>
