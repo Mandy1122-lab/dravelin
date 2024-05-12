@@ -82,13 +82,21 @@
                     echo "<p class='s-content'>{$row['s_info']}</p>";
                     echo "<p class='s-content'><b>在此取景作品</b></p>";
                     echo "<p class='s-content'><b>";
+
+                    $links = array();
+                    
                     if (!empty($row['drama_names'])) {
-                        echo "<a  style='color:#1d50a1 !important;' href='drama-detail.php?d_id=" . $row['d_id'] . "' class='drama'>{$row['drama_names']}</a>";
+                        $links[] = "<a style='color:#1d50a1 !important;' href='drama-detail.php?d_id=" . $row['d_id'] . "' class='drama'>{$row['drama_names']}</a>";
                     }
+                    
                     if (!empty($row['movie_names'])) {
-                        echo "<a style='color:#1d50a1 !important;' href='movie-detail.php?m_id=" . $row['m_id'] . "' class='movie'>{$row['movie_names']}</a>";
+                        $links[] = "<a style='color:#1d50a1 !important;' href='movie-detail.php?m_id=" . $row['m_id'] . "' class='movie'>{$row['movie_names']}</a>";
                     }
+                
+                    echo implode("、", $links);
+                    
                     echo "</b></p>";
+                    
                     echo "</div>";
                     echo "</div>";
                     echo "</div>";
@@ -178,11 +186,20 @@
     </section>
 <!-- Product Section End -->
 
-<!-- Footer Section Begin -->
-<?php include 'footer.html' ?>
-<!-- Footer Section End -->
+<?php 
+    include "footer.html";
+?>
 
-
+<!-- Search model Begin -->
+<div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch"><i class="icon_close"></i></div>
+        <form class="search-model-form">
+            <input type="text" id="search-input" placeholder="Search here.....">
+        </form>
+    </div>
+</div>
+<!-- Search model end -->
 
 <!-- Js Plugins -->
 <script src="js/jquery-3.3.1.min.js"></script>
