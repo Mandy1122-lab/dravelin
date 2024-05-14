@@ -245,10 +245,7 @@
         </div>
     </section>
 <!-- Product Section End -->
-
-<?php include 'footer.html'; ?>
-
-
+<?php include 'footer.html' ?>
 
 <!-- Js Plugins -->
 <script src="js/jquery-3.3.1.min.js"></script>
