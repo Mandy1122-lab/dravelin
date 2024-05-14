@@ -145,7 +145,7 @@
             LIMIT 4;
             ";
             $result = mysqli_query($conn, $sql);
-            if ($result ) {
+            if ($result) {
                 echo "<p class='s-topic bw-s-info'><b>更多相關景點</b></p>";
                 
 
@@ -165,7 +165,7 @@
                 echo "</div>";
             } 
             
-            mysqli_free_result($result);
+
             mysqli_close($conn);
 
             ?>
