@@ -77,9 +77,6 @@
     <!-- Header Section Begin -->
     <?php 
         include 'header.html';
-        echo "<br>";
-        echo "<a href='spot.php' style='margin-left:150px'><i class='fa-solid fa-arrow-left fa-xl' style='color: #1d50a1;'></i></a>";
-
     ?> 
     <!-- Header End -->
 
@@ -249,11 +246,7 @@
     </section>
 <!-- Product Section End -->
 
-<!-- Footer Section Begin -->
-   <?php 
-    include 'footer.html';
-?>
-<!-- Footer Section End -->
+<?php include 'footer.html'; ?>
 
 
 
