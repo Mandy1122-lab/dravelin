@@ -67,7 +67,7 @@
         }
     </style>
 </head>
-
+ 
 <body class="font_set">
     <!-- Page Preloder -->
     <div id="preloder">
@@ -77,8 +77,6 @@
     <!-- Header Section Begin -->
     <?php 
     include 'header.html';
-    echo "<br>";
-    echo "<a href='spot.php' style='margin-left:150px'><i class='fa-solid fa-arrow-left fa-xl' style='color: #1d50a1;'></i></a>";
 
     ?>
     <!-- Header End -->
@@ -88,10 +86,10 @@
     <section class="product-page spad">
         <div class="container">
         <?php
-include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
-$conn = sql_open();
-$c_id = $_GET["c_id"];
-$sql = "SELECT 
+        include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
+        $conn = sql_open();
+        $c_id = $_GET["c_id"];
+        $sql = "SELECT 
         country.c_name, 
         spot.s_name, 
         spot.s_pic, 
