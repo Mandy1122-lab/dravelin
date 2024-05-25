@@ -88,7 +88,7 @@ if ($result) {
 
         $links = array();
         
-        // Split drama names and IDs
+        
         $drama_names = !empty($row['drama_names']) ? explode('、', $row['drama_names']) : array();
         $drama_ids = !empty($row['d_ids']) ? explode(',', $row['d_ids']) : array();
         if (!empty($row['drama_names'])) {
@@ -97,7 +97,6 @@ if ($result) {
             }
         }
         
-        // Split movie names and IDs
         $movie_names = !empty($row['movie_names']) ? explode('、', $row['movie_names']) : array();
         $movie_ids = !empty($row['m_ids']) ? explode(',', $row['m_ids']) : array();
         if (!empty($row['movie_names'])) {
@@ -127,7 +126,7 @@ if ($result) {
         echo $row["frame"];
         echo "</div>";
         echo "</div>";
-        echo "</div>"; // 增加了缺失的結束標籤
+        
     }
     mysqli_free_result($result);
 }
