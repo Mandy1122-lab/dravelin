@@ -27,9 +27,13 @@
     <!--font-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
     <script src="https://kit.fontawesome.com/937e93c93c.js" crossorigin="anonymous"></script>
+
     <style>
         iframe{
             width:350px;height:200px
+        }
+        .map{
+            color:#1d50a1 !important;
         }
     
     </style>
@@ -80,7 +84,7 @@ if ($result) {
         echo "<p class='s-topic'><b>{$row['s_name']}</b></p>";
         echo "<div class='s-info'>";
         echo "<p class='s-content'><b>地址</b></p>";
-        echo "<p class='s-content'>{$row['s_add']}</p>";  
+        echo "<p class='s-content'>{$row['s_add']}  &nbsp;&nbsp;<a class='map' href='map.php?message={$row['s_name']}'><i class='fa-solid fa-location-dot'></i></a></p>";  
         echo "<p class='s-content'><b>景點資訊</b></p>";
         echo "<p class='s-content'>{$row['s_info']}</p>";
         echo "<p class='s-content'><b>在此取景作品</b></p>";
@@ -108,6 +112,7 @@ if ($result) {
         echo implode("、", $links);
         
         echo "</b></p>";
+
         
         echo "</div>";
         echo "</div>";
