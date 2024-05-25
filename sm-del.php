@@ -16,7 +16,7 @@
         }
 
         mysqli_close($conn);
-        header("Location:spot-edit.php?s_id=$s_id");
+        header("Location:spot-edit.php?s_id=$s_id#b");
         exit();
     }
 ?>
