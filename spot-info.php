@@ -80,7 +80,7 @@ if ($result) {
         echo "<p class='s-topic'><b>{$row['s_name']}</b></p>";
         echo "<div class='s-info'>";
         echo "<p class='s-content'><b>地址</b></p>";
-        echo "<p class='s-content'>{$row['s_add']}</p>";  // 移除了多餘的 </b>
+        echo "<p class='s-content'>{$row['s_add']}</p>";  
         echo "<p class='s-content'><b>景點資訊</b></p>";
         echo "<p class='s-content'>{$row['s_info']}</p>";
         echo "<p class='s-content'><b>在此取景作品</b></p>";
@@ -89,8 +89,8 @@ if ($result) {
         $links = array();
         
         // Split drama names and IDs
-        $drama_names = explode('、', $row['drama_names']);
-        $drama_ids = explode(',', $row['d_ids']);
+        $drama_names = !empty($row['drama_names']) ? explode('、', $row['drama_names']) : array();
+        $drama_ids = !empty($row['d_ids']) ? explode(',', $row['d_ids']) : array();
         if (!empty($row['drama_names'])) {
             foreach ($drama_names as $index => $d_name) {
                 $links[] = "<a style='color:#1d50a1 !important;' href='drama-detail.php?d_id=" . $drama_ids[$index] . "' class='drama'>{$d_name}</a>";
@@ -98,8 +98,8 @@ if ($result) {
         }
         
         // Split movie names and IDs
-        $movie_names = explode('、', $row['movie_names']);
-        $movie_ids = explode(',', $row['m_ids']);
+        $movie_names = !empty($row['movie_names']) ? explode('、', $row['movie_names']) : array();
+        $movie_ids = !empty($row['m_ids']) ? explode(',', $row['m_ids']) : array();
         if (!empty($row['movie_names'])) {
             foreach ($movie_names as $index => $m_name) {
                 $links[] = "<a style='color:#1d50a1 !important;' href='movie-detail.php?m_id=" . $movie_ids[$index] . "' class='movie'>{$m_name}</a>";
