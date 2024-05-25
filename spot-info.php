@@ -54,76 +54,86 @@
     <section class="product-page spad">
         <div class="container">
         <?php 
-            include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
-            $conn = sql_open();
-            $s_id = mysqli_real_escape_string($conn, $_GET["s_id"]);
-            $sql = "
-            SELECT spot.*, 
-            GROUP_CONCAT(DISTINCT drama.d_name ORDER BY drama.d_name SEPARATOR '、') AS drama_names,
-            GROUP_CONCAT(DISTINCT movie.m_name ORDER BY movie.m_name SEPARATOR '、') AS movie_names,
-            GROUP_CONCAT(DISTINCT drama.d_id ORDER BY drama.d_name SEPARATOR ',') AS d_id,
-            GROUP_CONCAT(DISTINCT movie.m_id ORDER BY movie.m_name SEPARATOR ',') AS m_id
-            FROM spot
-            LEFT JOIN spotd ON spot.s_id = spotd.s_id
-            LEFT JOIN drama ON spotd.d_id = drama.d_id
-            LEFT JOIN spotm ON spot.s_id = spotm.s_id
-            LEFT JOIN movie ON spotm.m_id = movie.m_id
-            WHERE spot.s_id = '$s_id'
-            GROUP BY spot.s_id, spot.s_name;
+include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
+$conn = sql_open();
+$s_id = mysqli_real_escape_string($conn, $_GET["s_id"]);
+$sql = "
+SELECT spot.*, 
+GROUP_CONCAT(DISTINCT drama.d_name ORDER BY drama.d_name SEPARATOR '、') AS drama_names,
+GROUP_CONCAT(DISTINCT movie.m_name ORDER BY movie.m_name SEPARATOR '、') AS movie_names,
+GROUP_CONCAT(DISTINCT drama.d_id ORDER BY drama.d_name SEPARATOR ',') AS d_ids,
+GROUP_CONCAT(DISTINCT movie.m_id ORDER BY movie.m_name SEPARATOR ',') AS m_ids
+FROM spot
+LEFT JOIN spotd ON spot.s_id = spotd.s_id
+LEFT JOIN drama ON spotd.d_id = drama.d_id
+LEFT JOIN spotm ON spot.s_id = spotm.s_id
+LEFT JOIN movie ON spotm.m_id = movie.m_id
+WHERE spot.s_id = '$s_id'
+GROUP BY spot.s_id, spot.s_name;
+";
+$result = mysqli_query($conn, $sql);
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo "<div class='up-wrap'>";
+        echo "<div><img class='s-cover' style='width: 360px !important;' src='{$row['s_pic']}'></div>";
+        echo "<div>";
+        echo "<p class='s-topic'><b>{$row['s_name']}</b></p>";
+        echo "<div class='s-info'>";
+        echo "<p class='s-content'><b>地址</b></p>";
+        echo "<p class='s-content'>{$row['s_add']}</b>";
+        echo "<p class='s-content'><b>景點資訊</b></p>";
+        echo "<p class='s-content'>{$row['s_info']}</p>";
+        echo "<p class='s-content'><b>在此取景作品</b></p>";
+        echo "<p class='s-content'><b>";
 
-            ";
-            $result = mysqli_query($conn, $sql);
-            if ($result) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<div class='up-wrap' style='margin-top:-30px'>";
-                    echo "<div><img class='s-cover' style='width: 360px !important;' src='{$row['s_pic']}'></div>";
-                    echo "<div>";
-                    echo "<p class='s-topic'><b>{$row['s_name']}</b></p>";
-                    echo "<div class='s-info'>";
-                    echo "<p class='s-content'><b>地址</b></p>";
-                    echo "<p class='s-content'>{$row['s_add']}</b>";
-                    echo "<p class='s-content'><b>景點資訊</b></p>";
-                    echo "<p class='s-content'>{$row['s_info']}</p>";
-                    echo "<p class='s-content'><b>在此取景作品</b></p>";
-                    echo "<p class='s-content'><b>";
-
-                    $links = array();
-                    
-                    if (!empty($row['drama_names'])) {
-                        $links[] = "<a style='color:#1d50a1 !important;' href='drama-detail.php?d_id=" . $row['d_id'] . "' class='drama'>{$row['drama_names']}</a>";
-                    }
-                    
-                    if (!empty($row['movie_names'])) {
-                        $links[] = "<a style='color:#1d50a1 !important;' href='movie-detail.php?m_id=" . $row['m_id'] . "' class='movie'>{$row['movie_names']}</a>";
-                    }
-                
-                    echo implode("、", $links);
-                    
-                    echo "</b></p>";
-                    
-                    echo "</div>";
-                    echo "</div>";
-                    echo "</div>";
-                    echo "<div class='below-wrap'>";
-                    echo "<p class='s-topic bw-s-info'><b>景點簡介</b></p>";
-                    echo "<p class='s-content'>{$row['s_intro']}</p>";
-                    echo "<div style='display: grid;grid-template-columns: 1fr 1fr'>";
-                    
-                    echo "<div>";
-                    echo "<p class='s-topic bw-s-info'><b>相關劇照</b></p>";
-                    echo "<img class='image bw-s-img' src='{$row['s_photo']}'>";
-                    echo "</div>";
-                    echo "<div>";
-                    echo "<p class='s-topic bw-s-info'><b>Google Map</b></p>";
-                    echo $row["frame"];
-                    echo "</div>";
-                    echo "</div>";
-                }
-                mysqli_free_result($result);
+        $links = array();
+        
+        // Split drama names and IDs
+        $drama_names = explode('、', $row['drama_names']);
+        $drama_ids = explode(',', $row['d_ids']);
+        if (!empty($row['drama_names'])) {
+            foreach ($drama_names as $index => $d_name) {
+                $links[] = "<a style='color:#1d50a1 !important;' href='drama-detail.php?d_id=" . $drama_ids[$index] . "' class='drama'>{$d_name}</a>";
             }
+        }
+        
+        // Split movie names and IDs
+        $movie_names = explode('、', $row['movie_names']);
+        $movie_ids = explode(',', $row['m_ids']);
+        if (!empty($row['movie_names'])) {
+            foreach ($movie_names as $index => $m_name) {
+                $links[] = "<a style='color:#1d50a1 !important;' href='movie-detail.php?m_id=" . $movie_ids[$index] . "' class='movie'>{$m_name}</a>";
+            }
+        }
+    
+        echo implode("、", $links);
+        
+        echo "</b></p>";
+        
+        echo "</div>";
+        echo "</div>";
+        echo "</div>";
+        echo "<div class='below-wrap'>";
+        echo "<p class='s-topic bw-s-info'><b>景點簡介</b></p>";
+        echo "<p class='s-content'>{$row['s_intro']}</p>";
+        echo "<div style='display: grid;grid-template-columns: 1fr 1fr'>";
+        
+        echo "<div>";
+        echo "<p class='s-topic bw-s-info'><b>相關劇照</b></p>";
+        echo "<img class='image bw-s-img' src='{$row['s_photo']}'>";
+        echo "</div>";
+        echo "<div>";
+        echo "<p class='s-topic bw-s-info'><b>Google Map</b></p>";
+        echo $row["frame"];
+        echo "</div>";
+        echo "</div>";
+    }
+    mysqli_free_result($result);
+}
 
-            mysqli_close($conn);
-            ?>
+mysqli_close($conn);
+?>
+
 
             <?php 
             include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
