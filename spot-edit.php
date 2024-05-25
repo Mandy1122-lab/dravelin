@@ -77,9 +77,10 @@
                 's_intro' => $row['s_intro'],
                 's_photo' => $row['s_photo'],
                 's_pic' => $row['s_pic'],
-                'c_id' => $row['c_id']
+                'c_id' => $row['c_id'],
+                'frame' => $row['frame']
             ];
-
+ 
             $sql_spotm = "SELECT m_id FROM spotm WHERE s_id = '$s_id'";
             $result_spotm = mysqli_query($conn, $sql_spotm);
             if (mysqli_num_rows($result_spotm) > 0) {
@@ -127,57 +128,34 @@ if (isset($_POST["Update"])) {
     $s_photo = $_POST["s_photo"];
     $s_pic = $_POST["s_pic"];
     $c_id = $_POST["c_id"];
-    $production_name = $_POST["production_name"];
+    $frame = $_POST["frame"];
+    
     
 
-    $sql = "SELECT m_id FROM movie WHERE m_name = '$production_name'";
+    $sql = "SELECT s_id FROM spot WHERE s_id = '$s_id'";
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
-        $production_id = $row['m_id'];
         
-        
-        $sql = "UPDATE spot SET s_name = '$s_name', s_add = '$s_add', s_intro = '$s_intro', s_info = '$s_info', s_photo = '$s_photo', s_pic = '$s_pic', lat_lon = '$lat_lon' WHERE s_id='$s_id' ";
+        $sql = "UPDATE spot SET s_name = '$s_name', s_add = '$s_add', s_intro = '$s_intro', s_info = '$s_info', s_photo = '$s_photo', s_pic = '$s_pic', lat_lon = '$lat_lon', frame = '$frame' WHERE s_id='$s_id' ";
         mysqli_query($conn, $sql);
         
         $sql = "UPDATE cspot SET c_id = '$c_id' WHERE s_id='$s_id'";
-        mysqli_query($conn, $sql);
-        
-        $sql = "UPDATE spotm SET m_id = '$production_id' WHERE s_id = '$s_id'";
         if (mysqli_query($conn, $sql)) {
             mysqli_close($conn);
             echo '<script>window.location.href = "spot-manage.php";</script>';
+            
             exit(); 
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+            echo '<script>window.location.href = "spot-edit.php?s_id=' . $s_id . '";</script>';
         }
-    } else {
-
-        $sql = "SELECT d_id FROM drama WHERE d_name = '$production_name'";
-        $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
-            $row = mysqli_fetch_assoc($result);
-            $production_id = $row['d_id'];
-            
-            $sql = "UPDATE spot SET s_name = '$s_name', s_add = '$s_add', s_intro = '$s_intro', s_info = '$s_info', s_photo = '$s_photo', s_pic = '$s_pic', lat_lon = '$lat_lon' WHERE s_id='$s_id' ";
-            mysqli_query($conn, $sql);
-            
-            $sql = "UPDATE cspot SET c_id = '$c_id' WHERE s_id='$s_id'";
-            mysqli_query($conn, $sql);
-            
-            $sql = "UPDATE spotd SET d_id = '$production_id' WHERE s_id = '$s_id'";
-            if (mysqli_query($conn, $sql)) {
-                mysqli_close($conn);
-                echo '<script>window.location.href = "spot-manage.php";</script>';
-                exit(); 
-            } else {
-                echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-            }
-        } else {
-            echo "找不到對應的劇集或電影資料";
+        
+    }else {
+            echo "找不到對應的景點資料";
         }
     }
-}
+
 
 ?>
 
@@ -185,7 +163,7 @@ if (isset($_POST["Update"])) {
     <!-- Product Section Begin -->
     <section class="product-page spad">
         <div class="container">
-            <div>
+
                 <div class="section_title" style='margin-top:-30px'>
                     <h4 class="s-edit-del">編輯 - 景點介紹</h4>
                 </div>
@@ -202,54 +180,16 @@ if (isset($_POST["Update"])) {
                         <a class="nav-link" href="#c">劇集</a>
                     </li>
                     </ul>
-                
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="a">
-                    <form action="" method="post">
+                </div>
+                <div class="tab-content" >
+                    <div class="tab-pane fade show active" id="a" style="margin-left: 40px;">
+                    <form action="" method="post" style="height:600px !important">
                     <input type="hidden" name="s_id" value="<?php echo $s_id; ?>">
                     <div class="row">
                     <div class="col">
                         <label for="inputEmail4">景點名稱</label>
                         <input type="text" name="s_name" class="form-control" placeholder="請輸入名稱" value="<?php echo $existingData['s_name'];?>">
-
-                        <label for="inputEmail4" style="margin-top: 25px;">地址</label>
-                        <input type="text" name="s_add" class="form-control" placeholder="請輸入地址" value="<?php echo $existingData['s_add'];?>">
-
-                        <label for="inputEmail4" style="margin-top: 25px;">景點座標</label>
-                        <input type="text" name="lat_lon" class="form-control" placeholder="請輸入座標" value="<?php echo $existingData['lat_lon'];?>">
-
-                        <label for="inputEmail4" style="margin-top: 25px;">景點資訊</label>
-                        <input type="text" name="s_info" class="form-control" placeholder="請輸入營業時間、電話等資訊" value="<?php echo $existingData['s_info'];?>">
-
-                        <label for="inputEmail4" style="margin-top: 25px;">在此取景作品</label><br>
-                        <select class="form-control select" id="exampleFormControlSelect1" name="production_name">
-                            <?php 
-                            include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
-                            $conn = sql_open();
-                            $sql = "SELECT d_name AS production_name FROM drama UNION SELECT m_name AS production_name FROM movie";
-                            if ($result = mysqli_query($conn, $sql)) {
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    $selected = ($row['production_name'] == $existingData['production_name']) ? 'selected' : ''; 
-                                    echo "<option value='" . $row['production_name'] . "' $selected>" . $row['production_name'] . "</option>";
-                                }
-                                mysqli_free_result($result);
-                            }
-                            mysqli_close($conn);
-                            ?>
-                        </select>
-
                         
-                    </div>
-                    <div class="col">
-                        <label for="inputEmail4">景點簡介</label>
-                        <textarea class="form-control" name="s_intro" placeholder="請輸入內容" rows="5"><?php echo $existingData['s_intro']; ?></textarea>
-
-
-                        <label for="inputEmail4" style="margin-top: 25px;">相關劇照</label>
-                        <input type="text" name="s_photo" class="form-control" placeholder="請輸入位置" value="<?php echo $existingData['s_photo'];?>">
-
-                        <label for="inputEmail4" style="margin-top: 25px;">景點封面圖</label>
-                        <input type="text" name="s_pic" class="form-control" placeholder="請輸入位置" value="<?php echo $existingData['s_pic'];?>">
                         <div style="display:grid;grid-template-rows:1fr 2fr;margin-top:25px">
                         <label for="inputEmail4" >國家</label>
                         <select class="form-control select" id="country" name="c_id">
@@ -271,6 +211,33 @@ if (isset($_POST["Update"])) {
 
                     </select>
                     </div>
+
+                        <label for="inputEmail4">地址</label>
+                        <input type="text" name="s_add" class="form-control" placeholder="請輸入地址" value="<?php echo $existingData['s_add'];?>">
+
+                        <label for="inputEmail4" style="margin-top: 25px;">景點座標</label>
+                        <input type="text" name="lat_lon" class="form-control" placeholder="請輸入座標" value="<?php echo $existingData['lat_lon'];?>">
+                        
+                        <label for="inputEmail4" style="margin-top: 25px">嵌入 Google 地圖</label>
+                        <textarea class="form-control" name="frame" placeholder="請輸入 Google 地圖 HTML" rows="1"><?php echo $existingData['frame']; ?></textarea>
+                        
+                        
+                        
+                    </div>
+                    <div class="col">
+                        <label for="inputEmail4" >景點資訊</label>
+                        <input type="text" name="s_info" class="form-control" placeholder="請輸入營業時間、電話等資訊" value="<?php echo $existingData['s_info'];?>">
+
+                        <label for="inputEmail4" style="margin-top: 25px;">景點簡介</label>
+                        <textarea class="form-control" name="s_intro" placeholder="請輸入內容" rows="5"><?php echo $existingData['s_intro']; ?></textarea>
+
+
+                        <label for="inputEmail4" style="margin-top: 25px;">相關劇照</label>
+                        <input type="text" name="s_photo" class="form-control" placeholder="請輸入位置" value="<?php echo $existingData['s_photo'];?>">
+
+                        <label for="inputEmail4" style="margin-top: 25px;">景點封面圖</label>
+                        <input type="text" name="s_pic" class="form-control" placeholder="請輸入位置" value="<?php echo $existingData['s_pic'];?>">
+                        
                         <nobr>
                         <button type="reset" class="btn btn-outline-primary cancel" onclick="window.location.href='spot-manage.php'">取消</button>
                         <button type="submit" name="Update" onclick="return confirmaction()" class="btn btn-outline-primary save">儲存</button>
@@ -280,33 +247,34 @@ if (isset($_POST["Update"])) {
                     
                     </div>
                 </form>
-                </div>
-                    </div>
-                    <div class="tab-pane fade" id="b">
+                </div> 
+                    
+                    <!--電影-->
+                    <div class="tab-pane fade" id="b" style="margin-left: 40px;">
                     <div style="display:grid;grid-template-columns:1fr 1fr;grid-gap:30px">
                     <!--左半（搜尋結果）-->
                     <div>
+                    <form class="form-inline my-2 my-lg-0" method="post" > 
                         <!--搜尋框-->
-                        <form class="form-inline my-2 my-lg-0" method="post"> 
-                        <input class="form-control mr-sm-2 search" type="text" name="m_name" placeholder="搜尋欲加入景點之電影" aria-label="Search"><br>
-                        <button type="submit" name="Search" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
                         
+                            <input class="form-control mr-sm-2 search" type="text" name="m_name" placeholder="搜尋欲加入景點之電影" aria-label="Search"><br>
+                            <button type="submit" name="b_search" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
                         </form>
+    
+                    
 
-                            <?php
                         
-
-                            if (isset($_POST["Search"])) {
+                        <?php
+                            if (isset($_POST["b_search"])) {
                                 $s_id = $_GET['s_id'];
                                 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
                                 $conn = sql_open();
 
                                 $conditions = array();
 
-
                                 if (!empty($_POST["m_name"])) {
                                     $m_name = "m_name LIKE '%" . mysqli_real_escape_string($conn, $_POST["m_name"]) . "%'";
-                                    $conditions[] = $s_name;
+                                    $conditions[] = $m_name;
                                 }
 
                                 $sql = "SELECT m_id, m_name FROM movie";
@@ -320,29 +288,24 @@ if (isset($_POST["Update"])) {
                                 echo "<table class='hs-tb'>";
                                 echo "<caption style='caption-side: top;color:#000;font-size:20px;'>搜尋結果</caption>";
                                 echo "<tr><th>編號</th><th>電影名稱</th><th>操作</th></tr>";
-                
+
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     echo "<tr>";
                                     echo "<td>{$row['m_id']}</td>";
                                     echo "<td>{$row['m_name']}</td>";
-                                    echo "<td><a href='sm-add.php?s_id=" . $row['s_id']  . "&m_id=" . $m_id . "'><i class='fa-solid fa-plus fa-lg' style='color: #1d50a1;'></i></a></td>";
-
-                                    
+                                    echo "<td><a href='sm-add.php?s_id=" . $s_id . "&m_id=" . $row['m_id'] . "'><i class='fa-solid fa-plus fa-lg' style='color: #1d50a1;'></i></a></td>";
                                     echo "</tr>";
                                 }
-                                
+
                                 echo "</table>";
 
                                 mysqli_free_result($result);
-
                                 mysqli_close($conn);
-                            }
-                            else{
+                            } else {
                                 $s_id = $_GET['s_id'];
                                 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
                                 $conn = sql_open();
-                                $sql = "SELECT movie.m_id, movie.m_name FROM movie LEFT JOIN spotm ON movie.m_id = spotm.m_id AND spotm.s_id = '$s_id' WHERE spotm.s_id IS NULL;
-                                ";
+                                $sql = "SELECT movie.m_id, movie.m_name FROM movie LEFT JOIN spotm ON movie.m_id = spotm.m_id AND spotm.s_id = '$s_id' WHERE spotm.s_id IS NULL";
                                 if ($result = mysqli_query($conn, $sql)) {
                                     echo "<table>";
                                     echo "<caption style='caption-side: top;color:#000;font-size:20px;'>未被列入景點之電影</caption>";
@@ -352,21 +315,18 @@ if (isset($_POST["Update"])) {
                                         echo "<tr>";
                                         echo "<td>{$row['m_id']}</td>";
                                         echo "<td>{$row['m_name']}</td>";
-                                        echo "<td><a href='sm-add.php?s_id=" . $s_id  . "&m_id=" . $m_id . "'><i class='fa-solid fa-plus fa-lg' style='color: #1d50a1;'></i></a></td>";
-
-                                        
+                                        echo "<td><a href='sm-add.php?s_id=" . $s_id . "&m_id=" . $row['m_id'] . "'><i class='fa-solid fa-plus fa-lg' style='color: #1d50a1;'></i></a></td>";
                                         echo "</tr>";
-                                        }
-                                                                    
-                                        echo "</div>";
+                                    }
+                                    echo "</tbody></table>";
 
-                                        mysqli_free_result($result);
-                                        }
+                                    mysqli_free_result($result);
+                                }
 
-                                    mysqli_close($conn);
-
+                                mysqli_close($conn);
                             }
                             ?>
+
                             </table>
                             </form>
                             </div>
@@ -398,7 +358,7 @@ if (isset($_POST["Update"])) {
                                             echo "<tr>";
                                             echo "<td>{$row['m_id']}</td>";
                                             echo "<td>{$row['m_name']}</td>";
-                                            echo "<td><a href='sm-del.php??s_id=" . $s_id  . "&sm_id=" . $row['sm_id'] . "' onclick='return confirmaction()'><i class='fa-solid fa-trash trash'></i></a></td>";
+                                            echo "<td><a href='sm-del.php?s_id=" . $s_id  . "&sm_id=" . $row['sm_id'] . "' onclick='return confirmaction()'><i class='fa-solid fa-trash trash'></i></a></td>";
                                             echo "</tr>";
                                         }
                                         
@@ -417,32 +377,31 @@ if (isset($_POST["Update"])) {
                             <button style="margin-left:460px" class="btn btn-outline-primary save" onclick="window.location.href='spot-manage.php'">儲存</button>
                     </div>
                     </div>    
-                    </div>
-
-                    <div class="tab-pane fade" id="c" style="margin-top:-625px">
+                    </div> 
+                    
+                        <!--劇集-->
+                <div class="tab-pane fade" id="c" style="margin-left: 40px;">
                     <div style="display:grid;grid-template-columns:1fr 1fr;grid-gap:30px">
                     <!--左半（搜尋結果）-->
                     <div>
                         <!--搜尋框-->
                         <form class="form-inline my-2 my-lg-0" method="post"> 
-                        <input class="form-control mr-sm-2 search" type="text" name="d_name" placeholder="搜尋欲加入景點之劇集" aria-label="Search"><br>
-                        <button type="submit" name="Search" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
-                        
+                            <input class="form-control mr-sm-2 search" type="text" name="d_name" placeholder="搜尋欲加入景點之劇集" aria-label="Search"><br>
+                            <button type="submit" name="c_search" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+
                         </form>
 
-                            <?php
-                            $s_id = $_GET['s_id'];
-                            if (isset($_POST["Search"])) {
+                        <?php
+                            if (isset($_POST["c_search"])) {
                                 $s_id = $_GET['s_id'];
                                 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
                                 $conn = sql_open();
 
                                 $conditions = array();
 
-
                                 if (!empty($_POST["d_name"])) {
                                     $d_name = "d_name LIKE '%" . mysqli_real_escape_string($conn, $_POST["d_name"]) . "%'";
-                                    $conditions[] = $s_name;
+                                    $conditions[] = $d_name;
                                 }
 
                                 $sql = "SELECT d_id, d_name FROM drama";
@@ -455,30 +414,25 @@ if (isset($_POST["Update"])) {
 
                                 echo "<table class='hs-tb'>";
                                 echo "<caption style='caption-side: top;color:#000;font-size:20px;'>搜尋結果</caption>";
-                                echo "<tr><th>編號</th><th>劇集名稱</th><th>操作</th></tr>";
-                
+                                echo "<tr><th>編號</th><th>電影名稱</th><th>操作</th></tr>";
+
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     echo "<tr>";
                                     echo "<td>{$row['d_id']}</td>";
                                     echo "<td>{$row['d_name']}</td>";
-                                    echo "<td><a href='sd-add.php?s_id=" . $row['s_id']  . "&d_id=" . $d_id . "'><i class='fa-solid fa-plus fa-lg' style='color: #1d50a1;'></i></a></td>";
-
-                                    
+                                    echo "<td><a href='sd-add.php?s_id=" . $s_id . "&d_id=" . $row['d_id'] . "'><i class='fa-solid fa-plus fa-lg' style='color: #1d50a1;'></i></a></td>";
                                     echo "</tr>";
                                 }
-                                
+
                                 echo "</table>";
 
                                 mysqli_free_result($result);
-
                                 mysqli_close($conn);
-                            }
-                            else{
+                            } else {
                                 $s_id = $_GET['s_id'];
                                 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
                                 $conn = sql_open();
-                                $sql = "SELECT drama.d_id, drama.d_name FROM drama LEFT JOIN spotd ON drama.d_id = spotd.d_id AND spotd.s_id = '$s_id' WHERE spotd.s_id IS NULL;
-                                ";
+                                $sql = "SELECT drama.d_id, drama.d_name FROM drama LEFT JOIN spotd ON drama.d_id = spotd.d_id AND spotd.s_id = '$s_id' WHERE spotd.s_id IS NULL";
                                 if ($result = mysqli_query($conn, $sql)) {
                                     echo "<table>";
                                     echo "<caption style='caption-side: top;color:#000;font-size:20px;'>未被列入景點之劇集</caption>";
@@ -488,21 +442,18 @@ if (isset($_POST["Update"])) {
                                         echo "<tr>";
                                         echo "<td>{$row['d_id']}</td>";
                                         echo "<td>{$row['d_name']}</td>";
-                                        echo "<td><a href='sd-add.php?s_id=" . $s_id  . "&d_id=" . $row['d_id'] . "'><i class='fa-solid fa-plus fa-lg' style='color: #1d50a1;'></i></a></td>";
-
-                                        
+                                        echo "<td><a href='sd-add.php?s_id=" . $s_id . "&d_id=" . $row['d_id'] . "'><i class='fa-solid fa-plus fa-lg' style='color: #1d50a1;'></i></a></td>";
                                         echo "</tr>";
-                                        }
-                                                                    
-                                        echo "</div>";
+                                    }
+                                    echo "</tbody></table>";
 
-                                        mysqli_free_result($result);
-                                        }
+                                    mysqli_free_result($result);
+                                }
 
-                                    mysqli_close($conn);
-
+                                mysqli_close($conn);
                             }
                             ?>
+
                             </table>
                             </form>
                             </div>
@@ -522,7 +473,7 @@ if (isset($_POST["Update"])) {
                                 <?php 
                                     include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/lib_mysql.php";
                                     $conn = sql_open();
-                                    $sql = "SELECT spotd.sd_id, drama.d_name, drama.d_id
+                                    $sql = "SELECT spotd.sd_id, drama.d_name,drama.d_id
                                     FROM spotd
                                     JOIN drama ON spotd.d_id = drama.d_id
                                     WHERE spotd.s_id = '$s_id'
@@ -534,7 +485,7 @@ if (isset($_POST["Update"])) {
                                             echo "<tr>";
                                             echo "<td>{$row['d_id']}</td>";
                                             echo "<td>{$row['d_name']}</td>";
-                                            echo "<td><a href='sd-del.php?s_id=" . $row['s_id']  . "&sd_id=" . $sd_id . "' onclick='return confirmaction()'><i class='fa-solid fa-trash trash'></i></a></td>";
+                                            echo "<td><a href='sd-del.php?s_id=" . $s_id  . "&sd_id=" . $row['sd_id'] . "' onclick='return confirmaction()'><i class='fa-solid fa-trash trash'></i></a></td>";
                                             echo "</tr>";
                                         }
                                         
@@ -551,18 +502,18 @@ if (isset($_POST["Update"])) {
                             </table>
                             
                             <button style="margin-left:460px" class="btn btn-outline-primary save" onclick="window.location.href='spot-manage.php'">儲存</button>
-
-
                     </div>
-                </div>    
                     </div>
+                    </div>
+                    </div>
+                    
 
                     
 
 
                 </div>
 
-            </div>
+            
             
         </div>
     </section>
@@ -590,7 +541,24 @@ if (isset($_POST["Update"])) {
         });
     });
 </script>
+<script src="confirm.js"></script>
+<script>
+        $(document).ready(function() {
+            // Check if URL contains a hash value
+            const hash = window.location.hash;
+            if (hash) {
+                // Activate the tab corresponding to the hash value
+                $('.nav-link[href="' + hash + '"]').tab('show');
+            }
 
+            // Update URL when a tab is clicked
+            $('.nav-link').on('click', function() {
+                const target = $(this).attr('href');
+                window.history.replaceState(null, null, target);
+            });
+        });
+    </script>
+    
 
 </body>
 
