@@ -84,7 +84,7 @@ if ($result) {
         echo "<p class='s-topic'><b>{$row['s_name']}</b></p>";
         echo "<div class='s-info'>";
         echo "<p class='s-content'><b>地址</b></p>";
-        echo "<p class='s-content'>{$row['s_add']}  &nbsp;&nbsp;<a class='map' href='map.php?message={$row['s_name']}'><i class='fa-solid fa-location-dot'></i></a></p>";  
+        echo "<p class='s-content'>{$row['s_add']}  &nbsp;&nbsp;<a class='map' href='map.php?message={$row['s_name']}' target='_blank'><i class='fa-solid fa-location-dot'></i></a></p>";  
         echo "<p class='s-content'><b>景點資訊</b></p>";
         echo "<p class='s-content'>{$row['s_info']}</p>";
         echo "<p class='s-content'><b>在此取景作品</b></p>";
