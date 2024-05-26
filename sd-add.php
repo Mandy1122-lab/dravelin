@@ -10,12 +10,12 @@ if (isset($_GET["s_id"] ) && isset( $_GET["d_id"])) {
     
     if (mysqli_query($conn, $sql)) {
         mysqli_close($conn);
-        header("Location:spot-edit.php?s_id=$s_id"#c);
-        exit();
+        header("Location:spot-edit.php?s_id=$s_id#c");
+        exit;
     } else {
         echo "Error: " . $sql . "<br>" . mysqli_error($conn);
     }
-}
+} 
 ?>
 
 
