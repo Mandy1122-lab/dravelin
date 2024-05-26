@@ -14,9 +14,9 @@
         } else {
             echo "錯誤： " . $sql . "<br>" . mysqli_error($conn);
         }
-
+ 
         mysqli_close($conn);
-        header("Location:spot-edit.php?s_id=$s_id"#c);
-        exit();
+        header("Location:spot-edit.php?s_id=$s_id#c");
+        exit;
     }
-?>
+?> 
