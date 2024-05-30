@@ -217,7 +217,7 @@ if ($result && $result->num_rows > 0) {
         'm_id' => $m_id,
         'm_name' => $m_name,
     ];
-}
+} ?>
 
 
 <script>
