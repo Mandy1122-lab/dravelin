@@ -202,10 +202,10 @@ $landmark = null;
 if ($result && $result->num_rows > 0) {
     $row = $result->fetch_assoc();
     list($lat, $lon) = explode(',', $row['lat_lon']);
-    $d_id = explode(',', $row['d_ids']);
-    $d_name = explode(',', $row['d_names']);
-    $m_id = explode(',', $row['m_ids']);
-    $m_name = explode(',', $row['m_names']);
+    $d_id = !empty($row['d_ids']) ? explode(',', $row['d_ids']) : array();
+    $d_name = !empty($row['d_names']) ? explode(',', $row['d_names']) : array();
+    $m_id = !empty($row['m_ids']) ? explode(',', $row['m_ids']) : array();
+    $m_name = !empty($row['m_names']) ? explode(',', $row['m_names']) : array();
     $landmark = [
         'id' => $row['s_id'],
         'description' => $row['s_add'],
@@ -218,7 +218,7 @@ if ($result && $result->num_rows > 0) {
         'm_name' => $m_name,
     ];
 }
-?>
+
 
 <script>
         function initMap() {
