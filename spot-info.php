@@ -221,69 +221,67 @@ if ($result && $result->num_rows > 0) {
 ?>
 
 <script>
-function initMap() {
-    var landmark = <?php echo json_encode($landmark); ?>;
+        function initMap() {
+            var landmark = <?php echo json_encode($landmark); ?>;
 
-    if (!landmark) {
-        console.error('No landmark data available.');
-        return;
-    }
+            var mapOptions = {
+                zoom: 16,
+                center: new google.maps.LatLng(landmark.lat, landmark.lon),
+                styles: [
+                    {
+                        featureType: "poi",
+                        stylers: [{ visibility: "off" }]
+                    },
+                    {
+                        featureType: "transit.station",
+                        stylers: [{ visibility: "off" }] 
+                    }
+                ],
+                disableDefaultUI: true
+            };
+            var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-    var mapOptions = {
-        zoom: 14,
-        center: new google.maps.LatLng(landmark.lat, landmark.lon),
-        styles: [
-            {
-                featureType: "poi",
-                stylers: [{ visibility: "off" }]
-            },
-            {
-                featureType: "transit.station",
-                stylers: [{ visibility: "off" }] 
+            var currentInfoWindow = null;
+
+            function createMarker(landmark) {
+                var infoWindow = new google.maps.InfoWindow({
+                    content:  '<b>'+ landmark.name +'</b>',
+                });
+                
+                google.maps.event.addListener(infoWindow, 'domready', function() {
+                    var iwCloseBtn = document.querySelector('.gm-ui-hover-effect');
+                    if (iwCloseBtn) {
+                        iwCloseBtn.style.display = 'none';
+                    }
+                });
+
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(landmark.lat, landmark.lon),
+                    map: map,
+                    title: landmark.name
+                });
+
+                marker.addListener('click', function() {
+                    infoWindow.open(map, marker);
+                    currentInfoWindow = infoWindow;
+                });
+                return marker;
             }
-        ],
-        disableDefaultUI: true
-    };
-    var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-    function createMarker(landmark) {
-        var popupContent = '<div class="custom-popup"><h2>' + landmark.name + '</h2>' + landmark.description;
+            map.addListener('click', function() {
+                if (currentInfoWindow) {
+                    currentInfoWindow.close();
+                    currentInfoWindow = null;
+                }
+            });
 
-        if (landmark.d_id.length > 0 && landmark.d_id[0] !== "") {
-            popupContent += '<br><b>演出劇集：</b>';
-            for (var i = 0; i < landmark.d_id.length; i++) {
-                popupContent += '<a href="drama-detail.php?d_id=' + landmark.d_id[i] + '">' + landmark.d_name[i] + '</a>, ';
+            if (landmark) {
+                createMarker(landmark);
             }
         }
-        if (landmark.m_id.length > 0 && landmark.m_id[0] !== "") {
-            popupContent += '<br><b>演出電影：</b>';
-            for (var i = 0; i < landmark.m_id.length; i++) {
-                popupContent += '<a href="movie-detail.php?m_id=' + landmark.m_id[i] + '">' + landmark.m_name[i] + '</a>, ';
-            }
-        }
-        popupContent += '</div>';
 
-        var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(landmark.lat, landmark.lon),
-            map: map,
-            title: landmark.name
-        });
-
-        var infoWindow = new google.maps.InfoWindow({
-            content: popupContent
-        });
-
-        marker.addListener('click', function() {
-            infoWindow.open(map, marker);
-        });
-        return marker;
-    }
-
-    createMarker(landmark);
-}
-
-window.onload = initMap;
-</script>
+        window.onload = initMap;
+    </script>
 <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6r4fhlxKrqtna5R6sZWXR29VBxulwfM8&callback=initMap"></script>
 
     <!-- Product Section End -->
