@@ -49,9 +49,7 @@
     <!-- Header Section Begin -->
     <?php 
     include 'header-mng.html';
-    echo "<br>";
-    echo "<a href='spot-manage.php' style='margin-left:150px'><i class='fa-solid fa-arrow-left fa-xl' style='color: #1d50a1;'></i></a>";
-
+    
     ?>
     <!-- Header End -->
     <!--原有資料-->
