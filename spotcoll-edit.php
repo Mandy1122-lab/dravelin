@@ -224,17 +224,6 @@
                 <div class="section_title">
                     <nobr>
                     <h4 style="display: inline-block !important;">編輯、刪除 - 景點合輯</h4>
-                    <button type="button" class="btn btn-outline-primary delete" style="margin-left:64%;display: inline-block !important;" onclick="return confirmAction(<?php echo $row['sc_id']; ?>)">刪除合輯</button>
-                    <script>
-                        function confirmAction(sc_id) {
-                            
-                            var result = confirm("是否確認刪除？");
-                            if (result) {
-                                window.location.href = 'spotcoll-del.php?sc_id=' + sc_id;
-                            }
-                            return false;
-                        }
-                        </script>
                     
                     </nobr>
                 </div>
