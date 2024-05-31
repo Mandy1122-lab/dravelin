@@ -120,7 +120,7 @@
                 echo "<img class='image bw-s-img' src='{$row['s_photo']}'>";
                 echo "</div>";
                 echo "<div>";
-                echo "<p class='s-topic bw-s-info'><b>Google Map</b></p>";
+                echo "<p class='s-topic bw-s-info'><b>地圖</b></p>";
                 echo "<div id='map' style='width: 300px; height: 200px;'></div>";
                 echo "</div>";
                 echo "</div>";
