@@ -180,7 +180,6 @@
         $existingData = [
             'sc_name' => $row['sc_name'],
             'sc_pic' => $row['sc_pic'],
-            'sc_intro' => $row['sc_intro']
 
         ];
         }else{
@@ -198,9 +197,9 @@
         $sc_id = $_POST["sc_id"];
         $sc_name = $_POST["sc_name"];
         $sc_pic = $_POST["sc_pic"];
-        $sc_intro = $_POST["sc_intro"];
 
-        $sql = "UPDATE scomplication SET sc_name = '$sc_name', sc_pic = '$sc_pic' , sc_intro = '$sc_intro' WHERE sc_id='$sc_id' ";
+
+        $sql = "UPDATE scomplication SET sc_name = '$sc_name', sc_pic = '$sc_pic'  WHERE sc_id='$sc_id' ";
 
         if (mysqli_query($conn, $sql)) {
             mysqli_close($conn);
@@ -228,7 +227,7 @@
                     </nobr>
                 </div>
                 <!--切割版面-->
-                
+
                 <form action="spotcoll-edit.php" method="post">
                 <input type="hidden" name="sc_id" value="<?php echo $sc_id; ?>">
                 <div style="display:grid;grid-template-columns:1fr 1fr">
@@ -237,9 +236,8 @@
                     <label for="inputEmail4">合輯名稱</label>
                     <input type="text" class="form-control input" placeholder="請輸入名稱" name="sc_name" value="<?php echo $existingData['sc_name'];?>">
                     <label for="inputEmail4" style="margin-top: 25px;" >合輯封面圖</label>
-                    <input type="text" class="form-control input" placeholder="請輸入位置" name="sc_pic" value="<?php echo $existingData['sc_pic'];?>">
-                    <label for="inputEmail4" style="margin-top: 25px;">合輯簡介</label>
-                    <textarea class="form-control input" placeholder="請輸入內容" rows="5" style="height: 150px;" name="sc_intro" value="<?php echo $existingData['sc_intro'];?>"></textarea>
+                    <textarea class="form-control input" name="sc_pic" placeholder="請輸入位置" rows="5"><?php echo $existingData['sc_pic']; ?></textarea>
+                    
                     </div>
                     <!--右半（目前列表）-->
                     <div style="padding-top:270px">
